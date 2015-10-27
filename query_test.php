@@ -13,21 +13,13 @@ background-color: #C1C1C1;
 height: 100%;
 }
 
-.content {
+.tab-content {
     box-shadow: 0 8px 10px 1px rgba(0, 0, 0, .14), 0 3px 14px 2px rgba(0, 0, 0, .12), 0 5px 5px -3px rgba(0, 0, 0, .2);
 height: 100%;
 }
 
 h1 {
 font-family: Garamond, Arial, serif;
-}
-
-.tab-content {
-display: none;
-}
-
-div .active-content {
-display: block;
 }
 
 </style>
@@ -41,25 +33,13 @@ display: block;
 <!-- Optional theme -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
 
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="js/bootstrap.min.js"></script>
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="js/bootstrap.min.js"></script>
 
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-
-<script>
-$(document).foundation();
-
-$(document).ready();
-
-$('.tab').click(function(){
-    var tab_id = $(this).attr('data-tab');
-    $('div.active-content').removeClass('active-content');
-    $('.'+tab_id).addClass('active-content');
-});
-</script>
 
 <nav class="navbar navbar-inverse">
   <div class="container-fluid">
@@ -71,41 +51,37 @@ $('.tab').click(function(){
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#">IMDB</a>
+      <a class="navbar-brand" href="#home">IMDB</a>
    </div>
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-	<!--ADD NEW dropdown-->
-	<li class="dropdown active">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Add New Content <span class="caret"></span></a>
-	  <ul class="dropdown-menu">
-            <li class="tab" data-tab="addActorDir"><a href="#">Add Actor/Director</a></li>
-	    <li class="tab" data-tab="addMovie"><a href="#">Add Movie Information</a></li>
-            <li><a href="#">Add Movie/Actor Relation</a></li>
-            <li role="separator" class="divider"></li>
+      <!--ADD NEW dropdown-->
+      <li class="dropdown active">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Add New Content <span class="caret"></span></a>
+	    <ul class="dropdown-menu">
+            <li role="presentation"><a href=".addActorDir" role="tab" data-toggle="tab">Add Actor/Director</a></li>
+            <li role="presentation"><a href=".addMovie" role="tab" data-toggle="tab">Add Movie Information</a></li>
+            <li role="presentation"><a href="#addMovActRel" role="tab" data-toggle="tab">Add Movie/Actor Relation</a></li>
+            <li role="presentation"><a href=".addMovDirRel" role="tab" data-toggle="tab">Add Movie/Director Relation</a></li>
+	    <li role="separator" class="divider"></li>
             <li><a href="#">Separated link</a></li>
             <li role="separator" class="divider"></li>
             <li><a href="#">One more separated link</a></li>
           </ul>
         </li>
 	<!--end ADD NEW dropdown-->
-        <li><a href="#">Browse</a></li>
-	<!--dropdown-->
+	<!--start BROWSE dropdown-->
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Browse<span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="#">Action</a></li>
-            <li><a href="#">Another action</a></li>
-            <li><a href="#">Something else here</a></li>
-            <li role="separator" class="divider"></li>
-            <li><a href="#">Separated link</a></li>
-            <li role="separator" class="divider"></li>
-            <li><a href="#">One more separated link</a></li>
+            <li><a href="#">All Actors/Actresses</a></li>
+            <li><a href="#">All Movies</a></li>
           </ul>
         </li>
 	<!--end dropdown-->
       </ul>
+      <!--IMPLEMENT SEARCH-->
       <form class="navbar-form navbar-left" role="search">
         <div class="form-group">
           <input type="text" class="form-control" placeholder="Search">
@@ -113,7 +89,7 @@ $('.tab').click(function(){
         <button type="submit" class="btn btn-default">Submit</button>
       </form>
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="#">Link</a></li>
+        <li role="presentation"><a href=".movieDBQuery" role="tab" data-toggle="tab">Enter Query</a></li>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
           <ul class="dropdown-menu">
@@ -135,11 +111,19 @@ $('.tab').click(function(){
 
 <!--MIDSECTION-->
 
-<div class="col-md-6 content">
+<div class="col-md-6 tab-content">
+
+<!--HOME-->
+<div id="home" class="tab-pane active" role="tabpanel">
+
+<h1>Welcome to IMDB.</h1>
+
+</div>
+<!--END HOME-->
 
 <!--MOVIE DB-->
 
-<div class="movieDBQuery tab-content">
+<div class="movieDBQuery tab-pane" role="tabpanel">
 
 <h1>Movie Database Query</h1>
 <p>(Ver 1.0 10/26/2015 by Sharon Grewal and Kelly Ou)<br>
@@ -156,12 +140,12 @@ For example, type in SELECT * FROM Actor WHERE id=10; </p>
 
 <?php
 $db_connection = mysql_connect("localhost", "cs143", "");
-if(!$db_connection){
-$errmsg = mysql_error($db_connection);
-print "Connection failed: $errmsg <br />";
-exit(1);
+   if(!$db_connection){
+   $errmsg = mysql_error($db_connection);
+   print "Connection failed: $errmsg <br />";
+   exit(1);
 }
-mysql_select_db("CS143", $db_connection);
+mysql_select_db("TEST", $db_connection);
 $query= $_GET["query"];
 
 $result = mysql_query($query, $db_connection);
@@ -173,25 +157,26 @@ if ($query) {
 }
 
 if ($_GET["submit"] && !sizeof($print_array)) {
-	print "No answer found.";
+   print "No answer found.";
 }
 
 else {
-	print '<table border="1"><tr>';
-	foreach(array_keys($print_array) as $col)
-	{ print '<td>' . $col . '</td>'; }
+   print '<table border="1"><tr>';
+   foreach(array_keys($print_array) as $col) {
+   print '<td>' . $col . '</td>'; }
+   
+   //print "<br />";
+   print '</tr>';
 
-	//print "<br />";
-	print '</tr>';
-
-	mysql_data_seek($result, 0);
-	while($print_array = mysql_fetch_assoc($result)){
-		print '<tr>';
-		foreach($print_array as $row)
-			{print '<td>' . $row . '</td>'; }
-		print '</tr>';	
-	}
-	print '</table>';
+   mysql_data_seek($result, 0);
+   while($print_array = mysql_fetch_assoc($result)){
+   print '<tr>';
+   foreach($print_array as $row) {
+   print '<td>' . $row . '</td>'; 
+   }
+   print '</tr>';
+}
+print '</table>';
 }
 
 mysql_free_result($result);
@@ -207,7 +192,7 @@ mysql_close($db_connection);
 
 <!--ADD ACTOR / DIR-->
 
-<div class="active-content tab-content addActorDir">
+<div class="addActorDir tab-pane" role="tabpanel">
 
 <h1>Add Actor / Director</h1>
 <p>(Ver 1.0 10/26/2015 by Sharon Grewal and Kelly Ou)<br>
@@ -218,19 +203,19 @@ Add an actor/actress or a director.</p>
   <input type="radio" name="position" value="Director">Director
   <br>
   First name:<br>
-  <input type="text" name="firstname">
+  <input type="text" name="firstName">
   <br>
   Last name:<br>
-  <input type="text" name="lastname">
+  <input type="text" name="lastName">
   <br>
   Sex:
   <input type="radio" name="sex" value="female" checked>Female
   <input type="radio" name="sex" value="male">Male
   <br>
-  Date of Birth:<br>
+  Date of Birth (yyyy-mm-dd):<br>
   <input type="text" name="dob">
   <br>
-  Date of Death:<br>
+  Date of Death (yyyy-mm-dd or leave blank):<br>
   <input type="text" name="dod">
   <br><br>
   <input type="submit" value="Submit">
@@ -239,11 +224,11 @@ Add an actor/actress or a director.</p>
 <?php
 $db_connection = mysql_connect("localhost", "cs143", "");
 if(!$db_connection){
-$errmsg = mysql_error($db_connection);
-print "Connection failed: $errmsg <br />";
-exit(1);
+   $errmsg = mysql_error($db_connection);
+   print "Connection failed: $errmsg <br />";
+   exit(1);
 }
-mysql_select_db("CS143", $db_connection);
+mysql_select_db("TEST", $db_connection);
 
 $position = "";
 $firstName = "";
@@ -261,7 +246,10 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
    $dod = $_GET["dod"]; 
 }
 
-$query = "INSERT INTO '$position' VALUES (0, '$firstName', '$lastName', '$sex', '$dob', '$dod')";
+print "position: " . $position . "<br>firstName: " . $firstName;
+
+$updateID = mysql_query("UPDATE MaxPersonID SET id=id+1", $db_connection);
+$query = "INSERT INTO '$position' VALUES ('$updateID', '$firstName', '$lastName', '$sex', '$dob', '$dod')";
 $result = mysql_query($query, $db_connection);
 
 if ($_GET["submit"]) {
@@ -286,7 +274,7 @@ mysql_close($db_connection);
 
 <!--ADD MOVIE-->
 
-<div class="tab-content addMovie">
+<div class="addMovie tab-pane" role="tabpanel">
 
 <h1>Add Movie</h1>
 <p>(Ver 1.0 10/26/2015 by Sharon Grewal and Kelly Ou)<br>
@@ -324,7 +312,6 @@ mysql_close($db_connection);
 
 <!--PHP-->
 
-<!--
 <?php
 $db_connection = mysql_connect("localhost", "cs143", "");
 if(!$db_connection){
@@ -332,7 +319,7 @@ $errmsg = mysql_error($db_connection);
 print "Connection failed: $errmsg <br />";
 exit(1);
 }
-mysql_select_db("CS143", $db_connection);
+mysql_select_db("TEST", $db_connection);
 
 $id = "";
 $title = "";
@@ -349,10 +336,8 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
    $genre = $_GET["genre"];
 }
 
-// TO-DO: need to figure out how to use "position" variable to
-// select corect TABLE
-// TO-DO: figure out how to generate id
-$query = "INSERT INTO Movie VALUES ('$id', '$title', '$year', '$rating', '$company')";
+$updateID = mysql_query("UPDATE MaxMovieID SET id=id+1", $db_connection);
+$query = "INSERT INTO Movie VALUES ('$updateID', '$title', '$year', '$rating', '$company')";
 $result = mysql_query($query, $db_connection);
 
 if (!$result) {
@@ -368,13 +353,49 @@ mysql_free_result($result);
 mysql_close($db_connection);
 
 ?>
--->
 
 <!--END PHP-->
 
 </div>
 
 <!--END ADD MOVIE-->
+
+<!--START ADD MOVIE / ACTOR RELATION-->
+
+<div id="addMovActRel" class="tab-pane" role="tabpanel">
+
+<h1>Add Movie / Actor Relation</h1>
+<p>(Ver 1.0 10/26/2015 by Sharon Grewal and Kelly Ou)<br>
+Input a movie and the actor/actress that took part, as well as their role in the movie.</p>
+
+<form action="<?php $_SERVER['PHP_SELF'];?>" method="get">
+  <select name="actor or actress">
+<?php 
+$db_connection = mysql_connect("localhost", "cs143", "");
+if(!$db_connection){
+   $errmsg = mysql_error($db_connection);
+   print "Connection failed: $errmsg <br />";
+   exit(1);
+}
+mysql_select_db("TEST", $db_connection);
+$sql = mysql_query("SELECT DISTINCT CONCAT_WS(' ', first, last) FROM Actor");
+while ($row = mysql_fetch_array($sql)){
+  echo "<option value=\"actor or actress\">" . $row['first'] . "</option>";
+}
+
+mysql_free_result($sql);
+mysql_close($db_connection);
+?>
+</select>
+  First name:<br>
+  <input type="text" name="firstname">
+  <br><br>
+  <input type="submit" value="Submit">
+</form>
+
+</div>
+
+<!--END ADD MOVIE / ACTOR RELATION-->
 
 </div>
 
@@ -386,5 +407,3 @@ mysql_close($db_connection);
 
 </body>
 </html>
-
-
