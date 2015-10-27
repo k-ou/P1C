@@ -131,10 +131,10 @@ For example, type in SELECT * FROM Actor WHERE id=10; </p>
 
 <?php
 $db_connection = mysql_connect("localhost", "cs143", "");
-if(!$db_connection){
-$errmsg = mysql_error($db_connection);
-print "Connection failed: $errmsg <br />";
-exit(1);
+   if(!$db_connection){
+   $errmsg = mysql_error($db_connection);
+   print "Connection failed: $errmsg <br />";
+   exit(1);
 }
 mysql_select_db("TEST", $db_connection);
 $query= $_GET["query"];
