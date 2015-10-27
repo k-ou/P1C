@@ -129,10 +129,11 @@ font-family: Garamond, Arial, serif;
   Type a query in the following box, please use correct SELECT statements. <br>
   For example, type in SELECT * FROM Actor WHERE id=10; </p>
 
-<form action="<?php $_SERVER['PHP_SELF'];?>" method="get">
+<!--form action="<?php $_SERVER['PHP_SELF'];?>" method="get"-->
+<form action="movieDBQuery.php" method="get">
 <textarea rows="4" cols"50" name="query"></textarea>
 <br>
-<input type="submit" value="submit query">
+<input type="submit" name="submit" value="submit query">
 </form>
 
 

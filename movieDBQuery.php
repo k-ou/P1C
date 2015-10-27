@@ -1,4 +1,6 @@
 <?php
+
+if(isset($_GET["submit"])){
 $db_connection = mysql_connect("localhost", "cs143", "");
    if(!$db_connection){
    $errmsg = mysql_error($db_connection);
@@ -41,5 +43,5 @@ print '</table>';
 
 mysql_free_result($result);
 mysql_close($db_connection);
-
+}
 ?>
