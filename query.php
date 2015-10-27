@@ -142,7 +142,7 @@ $errmsg = mysql_error($db_connection);
 print "Connection failed: $errmsg <br />";
 exit(1);
 }
-mysql_select_db("CS143", $db_connection);
+mysql_select_db("TEST", $db_connection);
 $query= $_GET["query"];
 
 $result = mysql_query($query, $db_connection);
@@ -224,7 +224,7 @@ $errmsg = mysql_error($db_connection);
 print "Connection failed: $errmsg <br />";
 exit(1);
 }
-mysql_select_db("CS143", $db_connection);
+mysql_select_db("TEST", $db_connection);
 
 $position = "";
 $firstName = "";
@@ -245,6 +245,8 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
 $query = "INSERT INTO '$position' VALUES (0, '$firstName', '$lastName', '$sex', '$dob', '$dod')";
 $result = mysql_query($query, $db_connection);
 
+//must check for violations for insertion/deletion/updates
+//currently
 if ($_GET["submit"]) {
    if (!$result) {
    $message  = 'Invalid query: ' . mysql_error() . "\n";
@@ -313,7 +315,7 @@ $errmsg = mysql_error($db_connection);
 print "Connection failed: $errmsg <br />";
 exit(1);
 }
-mysql_select_db("CS143", $db_connection);
+mysql_select_db("TEST", $db_connection);
 
 $id = "";
 $title = "";
