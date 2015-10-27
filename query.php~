@@ -62,9 +62,9 @@ font-family: Garamond, Arial, serif;
 	    <ul class="dropdown-menu">
             <li role="presentation"><a href=".addActorDir" role="tab" data-toggle="tab">Add Actor/Director</a></li>
             <li role="presentation"><a href=".addMovie" role="tab" data-toggle="tab">Add Movie Information</a></li>
-            <li role="presentation"><a href=".addMovActRel" role="tab" data-toggle="tab">Add Movie/Actor Relation</a></li>
-            <li role="presentation"><a href=".addMovDirRel" role="tab" data-toggle="tab">Add Movie/Director Relation</a></li>
-	    <li role="separator" class="divider"></li>
+            <li><a href="#">Add Movie/Actor Relation</a></li>
+            <li><a href="#">Add Movie/Director Relation</a></li>
+	        <li role="separator" class="divider"></li>
             <li><a href="#">Separated link</a></li>
             <li role="separator" class="divider"></li>
             <li><a href="#">One more separated link</a></li>
@@ -158,22 +158,21 @@ if ($_GET["submit"] && !sizeof($print_array)) {
 }
 
 else {
-   print '<table border="1"><tr>';
-   foreach(array_keys($print_array) as $col) {
-   print '<td>' . $col . '</td>'; }
-   
-   //print "<br />";
-   print '</tr>';
+     print '<table border="1"><tr>';
+     foreach(array_keys($print_array) as $col)
+     { print '<td>' . $col . '</td>'; }
 
-   mysql_data_seek($result, 0);
-   while($print_array = mysql_fetch_assoc($result)){
-   print '<tr>';
-   foreach($print_array as $row) {
-   print '<td>' . $row . '</td>'; 
-   }
-   print '</tr>';
-}
-print '</table>';
+     //print "<br />";
+     print '</tr>';
+
+     mysql_data_seek($result, 0);
+     while($print_array = mysql_fetch_assoc($result)){
+				print '<tr>';
+					      foreach($print_array as $row)
+												      {print '<td>' . $row . '</td>'; }
+												      	     	      	                   print '</tr>';  
+																	   	 	            }
+																				               print '</table>';
 }
 
 mysql_free_result($result);
