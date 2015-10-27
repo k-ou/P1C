@@ -5,24 +5,26 @@
 <style>
 
 html, body {
-height: 100%;
+  height: 100%;
 }
 
 .sidebar {
-background-color: #C1C1C1;
-height: 100%;
+  background-color: #C1C1C1;
+  height: 100%;
 }
 
 .tab-content {
-height:100%;
--webkit-box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
--moz-box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
-box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
-padding-top: -50px;
+  height:100%;
+  -webkit-box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
+  -moz-box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
+  box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
+  padding-top: -50px;
 }
 
-h1 {
-font-family: Garamond, Arial, serif;
+.jumbotron {
+  padding: 40px;
+  height: 100%;
+  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 }
 
 </style>
@@ -52,7 +54,9 @@ font-family: Garamond, Arial, serif;
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="./query.php">IMDB</a>
+      <a class="navbar-brand" href="./query.php">
+        <img alt="IMDB" src="http://www.lanfranchismemorialdiscotheque.com/wp-content/themes/lanfran/images/imdb_logo.png">
+      </a>
    </div>
    <!-- Collect the nav links, forms, and other content for toggling -->
    <div class="collapse navbar-collapse">
@@ -112,13 +116,11 @@ font-family: Garamond, Arial, serif;
 
 <div class="col-md-6 tab-content">
 
-  <!--HOME-->
-<div class="home">
-
-<h1>Welcome to IMDB.</h1>
-
+<div class="jumbotron">
+  <h1>Welcome to IMDB.</h1>
+  <p>We made this site for a CS 143 Project. This text was typed at 4:48 a.m.</p>
+  <p><a class="btn btn-primary btn-lg" href="https://github.com/k-ou/P1C" role="button">Learn more</a></p>
 </div>
-<!--END HOME-->
 
 </div>
 

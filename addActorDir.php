@@ -21,8 +21,8 @@ box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
 padding-top: -50px;
 }
 
-h1 {
-font-family: Garamond, Arial, serif;
+.addActorDir {
+  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 }
 
 </style>
@@ -52,7 +52,9 @@ font-family: Garamond, Arial, serif;
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="./home.php">IMDB</a>
+      <a class="navbar-brand" href="./query.php">
+        <img alt="IMDB" src="http://www.lanfranchismemorialdiscotheque.com/wp-content/themes/lanfran/images/imdb_logo.png">
+      </a>
    </div>
    <!-- Collect the nav links, forms, and other content for toggling -->
    <div class="collapse navbar-collapse">
