@@ -58,12 +58,12 @@ font-family: Garamond, Arial, serif;
       <ul class="nav navbar-nav">
       <!--ADD NEW dropdown-->
       <li class="dropdown active">
-        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Add New Content <span class="caret"></span></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Add New Content <span class="caret"></span></a>
 	    <ul class="dropdown-menu">
             <li role="presentation"><a href=".addActorDir" role="tab" data-toggle="tab">Add Actor/Director</a></li>
-            <li role="presentation"><a href=".addMovie" role="tab" data-toggle="tab">Add Movie Information</a></li>
-            <li role="presentation"><a href=".addMovActRel" role="tab" data-toggle="tab">Add Movie/Actor Relation</a></li>
-            <li role="presentation"><a href=".addMovDirRel" role="tab" data-toggle="tab">Add Movie/Director Relation</a></li>
+	    <li role="presentation"><a href=".addMovie" role="tab" data-toggle="tab">Add Movie Information</a></li>
+            <li><a href="#">Add Movie/Actor Relation</a></li>
+            <li><a href="#">Add Movie/Director Relation</a></li>
 	    <li role="separator" class="divider"></li>
             <li><a href="#">Separated link</a></li>
             <li role="separator" class="divider"></li>
@@ -71,12 +71,18 @@ font-family: Garamond, Arial, serif;
           </ul>
         </li>
 	<!--end ADD NEW dropdown-->
-	<!--start BROWSE dropdown-->
+        <li><a href="#">Browse</a></li>
+	<!--dropdown-->
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Browse<span class="caret"></span></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="#">All Actors/Actresses</a></li>
-            <li><a href="#">All Movies</a></li>
+            <li><a href="#">Action</a></li>
+            <li><a href="#">Another action</a></li>
+            <li><a href="#">Something else here</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="#">Separated link</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="#">One more separated link</a></li>
           </ul>
         </li>
 	<!--end dropdown-->
@@ -88,7 +94,7 @@ font-family: Garamond, Arial, serif;
         <button type="submit" class="btn btn-default">Submit</button>
       </form>
       <ul class="nav navbar-nav navbar-right">
-        <li role="presentation"><a href=".movieDBQuery" role="tab" data-toggle="tab">Enter Query</a></li>
+        <li><a href="#">Link</a></li>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
           <ul class="dropdown-menu">
@@ -127,16 +133,16 @@ For example, type in SELECT * FROM Actor WHERE id=10; </p>
 <input type="submit" value="submit query">
 </form>
 
-<!--PHP for Movie Data Query-->
+<!--PHP-->
 
 <?php
 $db_connection = mysql_connect("localhost", "cs143", "");
-   if(!$db_connection){
-   $errmsg = mysql_error($db_connection);
-   print "Connection failed: $errmsg <br />";
-   exit(1);
+if(!$db_connection){
+$errmsg = mysql_error($db_connection);
+print "Connection failed: $errmsg <br />";
+exit(1);
 }
-mysql_select_db("TEST", $db_connection);
+mysql_select_db("CS143", $db_connection);
 $query= $_GET["query"];
 
 $result = mysql_query($query, $db_connection);
@@ -152,22 +158,21 @@ if ($_GET["submit"] && !sizeof($print_array)) {
 }
 
 else {
-   print '<table border="1"><tr>';
-   foreach(array_keys($print_array) as $col) {
-   print '<td>' . $col . '</td>'; }
-   
-   //print "<br />";
-   print '</tr>';
+     print '<table border="1"><tr>';
+     foreach(array_keys($print_array) as $col)
+     { print '<td>' . $col . '</td>'; }
 
-   mysql_data_seek($result, 0);
-   while($print_array = mysql_fetch_assoc($result)){
-   print '<tr>';
-   foreach($print_array as $row) {
-   print '<td>' . $row . '</td>'; 
-   }
-   print '</tr>';
-}
-print '</table>';
+     //print "<br />";
+     print '</tr>';
+
+     mysql_data_seek($result, 0);
+     while($print_array = mysql_fetch_assoc($result)){
+     			print '<tr>';
+			      foreach($print_array as $row)
+			      			      {print '<td>' . $row . '</td>'; }
+						      	     print '</tr>';  
+							     }
+							     print '</table>';
 }
 
 mysql_free_result($result);
@@ -175,7 +180,7 @@ mysql_close($db_connection);
 
 ?>
 
-<!--END PHP for Movie Database Query-->
+<!--END PHP-->
 
 </div> 
 
@@ -194,19 +199,19 @@ Add an actor/actress or a director.</p>
   <input type="radio" name="position" value="Director">Director
   <br>
   First name:<br>
-  <input type="text" name="firstName">
+  <input type="text" name="firstname">
   <br>
   Last name:<br>
-  <input type="text" name="lastName">
+  <input type="text" name="lastname">
   <br>
   Sex:
   <input type="radio" name="sex" value="female" checked>Female
   <input type="radio" name="sex" value="male">Male
   <br>
-  Date of Birth (yyyy-mm-dd):<br>
+  Date of Birth:<br>
   <input type="text" name="dob">
   <br>
-  Date of Death (yyyy-mm-dd or leave blank):<br>
+  Date of Death:<br>
   <input type="text" name="dod">
   <br><br>
   <input type="submit" value="Submit">
@@ -215,11 +220,11 @@ Add an actor/actress or a director.</p>
 <?php
 $db_connection = mysql_connect("localhost", "cs143", "");
 if(!$db_connection){
-   $errmsg = mysql_error($db_connection);
-   print "Connection failed: $errmsg <br />";
-   exit(1);
+$errmsg = mysql_error($db_connection);
+print "Connection failed: $errmsg <br />";
+exit(1);
 }
-mysql_select_db("TEST", $db_connection);
+mysql_select_db("CS143", $db_connection);
 
 $position = "";
 $firstName = "";
@@ -237,14 +242,9 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
    $dod = $_GET["dod"]; 
 }
 
-print "position: " . $position . "<br>firstName: " . $firstName;
-
-$updateID = mysql_query("UPDATE MaxPersonID SET id=id+1", $db_connection);
-$query = "INSERT INTO '$position' VALUES ('$updateID', '$firstName', '$lastName', '$sex', '$dob', '$dod')";
+$query = "INSERT INTO '$position' VALUES (0, '$firstName', '$lastName', '$sex', '$dob', '$dod')";
 $result = mysql_query($query, $db_connection);
 
-//must check for violations for insertion/deletion/updates
-//currently
 if ($_GET["submit"]) {
    if (!$result) {
    $message  = 'Invalid query: ' . mysql_error() . "\n";
@@ -305,6 +305,7 @@ mysql_close($db_connection);
 
 <!--PHP-->
 
+<!--
 <?php
 $db_connection = mysql_connect("localhost", "cs143", "");
 if(!$db_connection){
@@ -312,7 +313,7 @@ $errmsg = mysql_error($db_connection);
 print "Connection failed: $errmsg <br />";
 exit(1);
 }
-mysql_select_db("TEST", $db_connection);
+mysql_select_db("CS143", $db_connection);
 
 $id = "";
 $title = "";
@@ -329,8 +330,10 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
    $genre = $_GET["genre"];
 }
 
-$updateID = mysql_query("UPDATE MaxMovieID SET id=id+1", $db_connection);
-$query = "INSERT INTO Movie VALUES ('$updateID', '$title', '$year', '$rating', '$company')";
+// TO-DO: need to figure out how to use "position" variable to
+// select corect TABLE
+// TO-DO: figure out how to generate id
+$query = "INSERT INTO Movie VALUES ('$id', '$title', '$year', '$rating', '$company')";
 $result = mysql_query($query, $db_connection);
 
 if (!$result) {
@@ -346,49 +349,13 @@ mysql_free_result($result);
 mysql_close($db_connection);
 
 ?>
+-->
 
 <!--END PHP-->
 
 </div>
 
 <!--END ADD MOVIE-->
-
-<!--START ADD MOVIE / ACTOR RELATION-->
-
-<div class="addMovActRel tab-pane" role="tabpanel">
-
-<h1>Add Movie / Actor Relation</h1>
-<p>(Ver 1.0 10/26/2015 by Sharon Grewal and Kelly Ou)<br>
-Input a movie and the actor/actress that took part, as well as their role in the movie.</p>
-
-<form action="<?php $_SERVER['PHP_SELF'];?>" method="get">
-  <select name="actor or actress">
-<?php 
-$db_connection = mysql_connect("localhost", "cs143", "");
-if(!$db_connection){
-   $errmsg = mysql_error($db_connection);
-   print "Connection failed: $errmsg <br />";
-   exit(1);
-}
-mysql_select_db("TEST", $db_connection);
-$sql = mysql_query("SELECT DISTINCT CONCAT_WS(' ', first, last) FROM Actor");
-while ($row = mysql_fetch_array($sql)){
-  echo "<option value=\"actor or actress\">" . $row['first'] . "</option>";
-}
-
-mysql_free_result($sql);
-mysql_close($db_connection);
-?>
-</select>
-  First name:<br>
-  <input type="text" name="firstname">
-  <br><br>
-  <input type="submit" value="Submit">
-</form>
-
-</div>
-
-<!--END ADD MOVIE / ACTOR RELATION-->
 
 </div>
 
