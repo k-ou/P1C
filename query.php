@@ -133,7 +133,7 @@ For example, type in SELECT * FROM Actor WHERE id=10; </p>
 <input type="submit" value="submit query">
 </form>
 
-<!--PHP-->
+<!--PHP for Movie Data Query-->
 
 <?php
 $db_connection = mysql_connect("localhost", "cs143", "");
@@ -180,7 +180,7 @@ mysql_close($db_connection);
 
 ?>
 
-<!--END PHP-->
+<!--END PHP for Movie Database Query-->
 
 </div> 
 
