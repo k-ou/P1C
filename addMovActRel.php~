@@ -1,0 +1,16 @@
+<?php 
+$db_connection = mysql_connect("localhost", "cs143", "");
+if(!$db_connection){
+   $errmsg = mysql_error($db_connection);
+   print "Connection failed: $errmsg <br />";
+   exit(1);
+}
+mysql_select_db("TEST", $db_connection);
+$sql = mysql_query("SELECT DISTINCT CONCAT_WS(' ', first, last) FROM Actor");
+while ($row = mysql_fetch_array($sql)){
+  echo "<option value=\"actor or actress\">" . $row['first'] . "</option>";
+}
+
+mysql_free_result($sql);
+mysql_close($db_connection);
+?>

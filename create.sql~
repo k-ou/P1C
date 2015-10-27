@@ -36,7 +36,7 @@ CREATE TABLE MovieGenre(
 CREATE TABLE MovieDirector(
        mid INT NOT NULL,
        did INT NOT NULL,
-       UNIQUE(mid, did),
+UNIQUE(mid, did),
        FOREIGN KEY (mid) references Movie(id),
 	/* MovieDirector must reference a valid Movie (id) entry. */
        FOREIGN KEY (did) references Director(id)
@@ -46,7 +46,7 @@ CREATE TABLE MovieActor(
        mid INT NOT NULL,
        aid INT NOT NULL,
        role VARCHAR(50) NOT NULL,
-       UNIQUE(mid, aid, role),
+UNIQUE(mid, aid, role),
        FOREIGN KEY (mid) references Movie(id),
 	/* MovieActor must reference a valid Movie (id) entry. */
        FOREIGN KEY (aid) references Actor(id)
@@ -58,7 +58,7 @@ CREATE TABLE Review(
        mid INT NOT NULL,
        rating INT NOT NULL,
        comment VARCHAR(500),
-       UNIQUE(name, mid),
+UNIQUE(name, mid),
        FOREIGN KEY (mid) references Movie(id),
 	/* Review must reference a valid Movie (id) entry. */
        CHECK(rating >= 0 AND rating < 6)
