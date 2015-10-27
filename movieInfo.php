@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 
@@ -112,98 +113,15 @@ font-family: Garamond, Arial, serif;
 
 <div class="col-md-6 tab-content">
 
-  <!--ADD MOVIE-->
-<div class="addMovie">
+<!--START MOVIE INFO-->
+<div class="movieInfo">
 
-  <h1>Add Movie</h1>
+  <h1>Movie Info</h1>
   <p>(Ver 1.0 10/26/2015 by Sharon Grewal and Kelly Ou)<br>
-  <p>Add New Movie:</p>
-
-<!--<form action="<?php $_SERVER['PHP_SELF'];?>" method="get">-->
-<form action="./addMovie.php" method="GET">
-  Title:<br>
-  <input type="text" name="title">
-  <br>
-  Company:<br>
-  <input type="text" name="company"><br>
-  Year:<br>
-  <input type="text" name="year"><br>
-  MPAA Rating :
-  <select name="mpaarating">
-    <option value="G">G</option>
-    <option value="PG">PG</option>
-    <option value="PG-13">PG-13</option>
-    <option value="NC-17">NC-17</option>
-    <option value="R">R</option>
-    <option value="surrendere">surrendere</option>
-  </select><br/>
-    Genre:<br>
-  <input type="checkbox" name="action">Action<br>
-    <input type="checkbox" name="adult">Adult<br>
-    <input type="checkbox" name="adventure">Adventure<br>
-    <input type="checkbox" name="animation">Animation<br>
-    <input type="checkbox" name="comedy">Comedy<br>
-    <input type="checkbox" name="crime">Crime<br>
-    <input type="checkbox" name="documentary">Documentary<br>
-    <input type="checkbox" name="family">Family<br>
-    <input type="checkbox" name="fantasy">Fantasy<br>
-    <input type="checkbox" name="horror">Horror<br>
-    <input type="checkbox" name="musical">Musical<br>
-    <input type="checkbox" name="myster">Mystery<br>
-    <input type="checkbox" name="romance">Romance<br>
-    <input type="checkbox" name="sci-fi">Sci-Fi<br>
-    <input type="checkbox" name="short">Short<br>
-    <input type="checkbox" name="thriller">Thriller<br>
-    <input type="checkbox" name="war">War<br>
-    <input type="checkbox" name="western">Western<br>
-  <br><br>
-  <input type="submit" value="Submit">
-</form>
-
-<?php
-$db_connection = mysql_connect("localhost", "cs143", "");
-if(!$db_connection){
-	$errmsg = mysql_error($db_connection);
-	print "Connection failed: $errmsg <br />";
-	exit(1);
-}
-mysql_select_db("TEST", $db_connection);
-
-$id = "";
-$title = "";
-$year = "";
-$rating = "";
-$company = "";
-$genre = "";
-
-if ($_SERVER["REQUEST_METHOD"] == "GET") {
-   $title = $_GET["title"];
-   $year = $_GET["year"];
-   $rating = $_GET["rating"];
-   $company = $_GET["company"];
-   $genre = $_GET["genre"];
-}
-
-$updateID = mysql_query("UPDATE MaxMovieID SET id=id+1", $db_connection);
-$query = "INSERT INTO Movie VALUES ('$updateID', '$title', '$year', '$rating', '$company')";
-$result = mysql_query($query, $db_connection);
-
-if (!$result) {
-    $message  = 'Invalid query: ' . mysql_error() . "\n";
-    $message .= 'Whole query: ' . $query;
-    die($message);
-}
-else {
-   print "You've successfully added <br />" . $title;
-}
-
-mysql_free_result($result);
-mysql_close($db_connection);
-
-?>
+  Select a movie.</p>
 
 </div>
-<!--END ADD MOVIE-->
+<!--END MOVIE INFO-->
 
 </div>
 
