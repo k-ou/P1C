@@ -14,8 +14,11 @@ height: 100%;
 }
 
 .tab-content {
-    box-shadow: 0 8px 10px 1px rgba(0, 0, 0, .14), 0 3px 14px 2px rgba(0, 0, 0, .12), 0 5px 5px -3px rgba(0, 0, 0, .2);
-height: 100%;
+height:100%;
+-webkit-box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
+-moz-box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
+box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
+padding-top: -50px;
 }
 
 h1 {
@@ -35,8 +38,6 @@ font-family: Garamond, Arial, serif;
 
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-<!-- Include all compiled plugins (below), or include individual files as needed -->
-<script src="js/bootstrap.min.js"></script>
 
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
@@ -53,34 +54,33 @@ font-family: Garamond, Arial, serif;
       </button>
       <a class="navbar-brand" href="#">IMDB</a>
    </div>
-    <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+   <!-- Collect the nav links, forms, and other content for toggling -->
+   <div class="collapse navbar-collapse">
       <ul class="nav navbar-nav">
       <!--ADD NEW dropdown-->
       <li class="dropdown active">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Add New Content <span class="caret"></span></a>
-	    <ul class="dropdown-menu">
-            <li role="presentation"><a href=".addActorDir" role="tab" data-toggle="tab">Add Actor/Director</a></li>
-            <li role="presentation"><a href=".addMovie" role="tab" data-toggle="tab">Add Movie Information</a></li>
-            <li role="presentation"><a href=".addMovActRel" role="tab" data-toggle="tab">Add Movie/Actor Relation</a></li>
-            <li role="presentation"><a href=".addMovDirRel" role="tab" data-toggle="tab">Add Movie/Director Relation</a></li>
-	    <li role="separator" class="divider"></li>
-            <li><a href="#">Separated link</a></li>
-            <li role="separator" class="divider"></li>
-            <li><a href="#">One more separated link</a></li>
-          </ul>
-        </li>
-	<!--end ADD NEW dropdown-->
-	<!--start BROWSE dropdown-->
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Browse<span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="#">All Actors/Actresses</a></li>
-            <li><a href="#">All Movies</a></li>
-          </ul>
-        </li>
-	<!--end dropdown-->
+        <ul class="dropdown-menu">
+          <li role="presentation"><a href=".addActorDir" role="tab" data-toggle="tab">Add Actor/Director</a></li>
+          <li role="presentation"><a href=".addMovie" role="tab" data-toggle="tab">Add Movie Information</a></li>
+          <li role="presentation"><a href=".addMovActRel" role="tab" data-toggle="tab">Add Movie/Actor Relation</a></li>
+          <li role="presentation"><a href=".addMovDirRel" role="tab" data-toggle="tab">Add Movie/Director Relation</a></li>
+          <li role="separator" class="divider"></li>
+          <li><a href="#">Separated link</a></li>
+        </ul>
+      </li>
+      <!--end ADD NEW dropdown-->
+      <!--start BROWSE dropdown-->
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Browse<span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li role="presentation"><a href=".actorInfo" role="tab" data-toggle="tab">All Actors/Actresses</a></li>
+          <li role="presentation"><a href=".movieInfo" role="tab" data-toggle="tab">All Movies</a></li>
+        </ul>
+      </li>
+  <!--end dropdown-->
       </ul>
+      <!--IMPLEMENT SEARCH-->
       <form class="navbar-form navbar-left" role="search">
         <div class="form-group">
           <input type="text" class="form-control" placeholder="Search">
@@ -112,14 +112,22 @@ font-family: Garamond, Arial, serif;
 
 <div class="col-md-6 tab-content">
 
+<!--HOME-->
+<div class="home tab-pane active" role="tabpanel">
+
+<h1>Welcome to IMDB.</h1>
+
+</div>
+<!--END HOME-->
+
 <!--MOVIE DB-->
 
-<div class="movieDBQuery tab-pane active" role="tabpanel">
+<div class="movieDBQuery tab-pane" role="tabpanel">
 
-<h1>Movie Database Query</h1>
-<p>(Ver 1.0 10/26/2015 by Sharon Grewal and Kelly Ou)<br>
-Type a query in the following box, please use correct SELECT statements. <br>
-For example, type in SELECT * FROM Actor WHERE id=10; </p>
+  <h1>Movie Database Query</h1>
+  <p>(Ver 1.0 10/26/2015 by Sharon Grewal and Kelly Ou)<br>
+  Type a query in the following box, please use correct SELECT statements. <br>
+  For example, type in SELECT * FROM Actor WHERE id=10; </p>
 
 <form action="<?php $_SERVER['PHP_SELF'];?>" method="get">
 <textarea rows="4" cols"50" name="query"></textarea>
@@ -128,13 +136,12 @@ For example, type in SELECT * FROM Actor WHERE id=10; </p>
 </form>
 
 <!--PHP-->
-
 <?php
 $db_connection = mysql_connect("localhost", "cs143", "");
-if(!$db_connection){
-$errmsg = mysql_error($db_connection);
-print "Connection failed: $errmsg <br />";
-exit(1);
+   if(!$db_connection){
+   $errmsg = mysql_error($db_connection);
+   print "Connection failed: $errmsg <br />";
+   exit(1);
 }
 mysql_select_db("TEST", $db_connection);
 $query= $_GET["query"];
@@ -174,7 +181,6 @@ mysql_free_result($result);
 mysql_close($db_connection);
 
 ?>
-
 <!--END PHP-->
 
 </div> 
@@ -182,12 +188,11 @@ mysql_close($db_connection);
 <!--END MOVIE DB-->
 
 <!--ADD ACTOR / DIR-->
-
 <div class="addActorDir tab-pane" role="tabpanel">
 
-<h1>Add Actor / Director</h1>
-<p>(Ver 1.0 10/26/2015 by Sharon Grewal and Kelly Ou)<br>
-Add an actor/actress or a director.</p>
+  <h1>Add Actor / Director</h1>
+  <p>(Ver 1.0 10/26/2015 by Sharon Grewal and Kelly Ou)<br>
+  Add an actor/actress or a director.</p>
 
 <form action="<?php $_SERVER['PHP_SELF'];?>" method="get">
   <input type="radio" name="position" value="Actor" checked>Actor/Actress
@@ -212,64 +217,18 @@ Add an actor/actress or a director.</p>
   <input type="submit" value="Submit">
 </form>
 
-<?php
-$db_connection = mysql_connect("localhost", "cs143", "");
-if(!$db_connection){
-   $errmsg = mysql_error($db_connection);
-   print "Connection failed: $errmsg <br />";
-   exit(1);
-}
-mysql_select_db("TEST", $db_connection);
-
-$position = "";
-$firstName = "";
-$lastName = "";
-$sex = "";
-$dob = "";
-$dod = "";
-
-if ($_SERVER["REQUEST_METHOD"] == "GET") {
-   $position = $_GET["position"];
-   $firstName = $_GET["firstName"];
-   $lastName = $_GET["lastName"];
-   $sex = $_GET["sex"];
-   $dob = $_GET["dob"];
-   $dod = $_GET["dod"]; 
-}
-
-print "position: " . $position . "<br>firstName: " . $firstName;
-
-$updateID = mysql_query("UPDATE MaxPersonID SET id=id+1", $db_connection);
-$query = "INSERT INTO '$position' VALUES ('$updateID', '$firstName', '$lastName', '$sex', '$dob', '$dod')";
-$result = mysql_query($query, $db_connection);
-
-if ($_GET["submit"]) {
-   if (!$result) {
-   $message  = 'Invalid query: ' . mysql_error() . "\n";
-   $message .= 'Whole query: ' . $query;
-   die($message);
-   }
-   else {
-   print "You've successfully added <br />" . $firstName . " " . $lastName;
-   }
-}
-
-mysql_free_result($result);
-mysql_close($db_connection);
-
-?>
+<?php include 'addActorDir.php';?>
 
 </div>
-
 <!--END ADD ACTOR / DIR-->
 
 <!--ADD MOVIE-->
-
 <div class="addMovie tab-pane" role="tabpanel">
 
-<h1>Add Movie</h1>
-<p>(Ver 1.0 10/26/2015 by Sharon Grewal and Kelly Ou)<br>
-<p>Add New Movie:</p>
+  <h1>Add Movie</h1>
+  <p>(Ver 1.0 10/26/2015 by Sharon Grewal and Kelly Ou)<br>
+  <p>Add New Movie:</p>
+
 <form action="<?php $_SERVER['PHP_SELF'];?>" method="get">
   Title:<br>
   <input type="text" name="title">
@@ -301,91 +260,47 @@ mysql_close($db_connection);
   <input type="submit" value="Submit">
 </form>
 
-<!--PHP-->
-
-<?php
-$db_connection = mysql_connect("localhost", "cs143", "");
-if(!$db_connection){
-$errmsg = mysql_error($db_connection);
-print "Connection failed: $errmsg <br />";
-exit(1);
-}
-mysql_select_db("TEST", $db_connection);
-
-$id = "";
-$title = "";
-$year = "";
-$rating = "";
-$company = "";
-$genre = "";
-
-if ($_SERVER["REQUEST_METHOD"] == "GET") {
-   $title = $_GET["title"];
-   $year = $_GET["year"];
-   $rating = $_GET["rating"];
-   $company = $_GET["company"];
-   $genre = $_GET["genre"];
-}
-
-$updateID = mysql_query("UPDATE MaxMovieID SET id=id+1", $db_connection);
-$query = "INSERT INTO Movie VALUES ('$updateID', '$title', '$year', '$rating', '$company')";
-$result = mysql_query($query, $db_connection);
-
-if (!$result) {
-    $message  = 'Invalid query: ' . mysql_error() . "\n";
-    $message .= 'Whole query: ' . $query;
-    die($message);
-}
-else {
-   print "You've successfully added <br />" . $firstName . " " . $lastName;
-}
-
-mysql_free_result($result);
-mysql_close($db_connection);
-
-?>
-
-<!--END PHP-->
-
 </div>
-
 <!--END ADD MOVIE-->
 
 <!--START ADD MOVIE / ACTOR RELATION-->
-
 <div class="addMovActRel tab-pane" role="tabpanel">
 
-<h1>Add Movie / Actor Relation</h1>
-<p>(Ver 1.0 10/26/2015 by Sharon Grewal and Kelly Ou)<br>
-Input a movie and the actor/actress that took part, as well as their role in the movie.</p>
-
-<form action="<?php $_SERVER['PHP_SELF'];?>" method="get">
-  <select name="actor or actress">
-<?php 
-$db_connection = mysql_connect("localhost", "cs143", "");
-if(!$db_connection){
-   $errmsg = mysql_error($db_connection);
-   print "Connection failed: $errmsg <br />";
-   exit(1);
-}
-mysql_select_db("TEST", $db_connection);
-$sql = mysql_query("SELECT DISTINCT CONCAT_WS(' ', first, last) FROM Actor");
-while ($row = mysql_fetch_array($sql)){
-  echo "<option value=\"actor or actress\">" . $row['first'] . "</option>";
-}
-
-mysql_free_result($sql);
-mysql_close($db_connection);
-?>
-</select>
-  First name:<br>
-  <input type="text" name="firstname">
-  <br><br>
-  <input type="submit" value="Submit">
-</form>
+  <h1>Add Movie / Actor Relation</h1>
+  <p>(Ver 1.0 10/26/2015 by Sharon Grewal and Kelly Ou)<br>
+  Input a movie and the actor/actress that took part, as well as their role in the movie.</p>
 
 </div>
+<!--END ADD MOVIE / ACTOR RELATION-->
 
+<!--START ADD MOVIE / DIRECTOR RELATION-->
+<div class="addMovDirRel tab-pane" role="tabpanel">
+
+  <h1>Add Movie / Director Relation</h1>
+  <p>(Ver 1.0 10/26/2015 by Sharon Grewal and Kelly Ou)<br>
+  Input a movie and the director that directed it.</p>
+
+</div>
+<!--END ADD MOVIE / ACTOR RELATION-->
+
+<!--START ACTOR INFO-->
+<div class="actorInfo tab-pane" role="tabpanel">
+
+  <h1>Actor Info</h1>
+  <p>(Ver 1.0 10/26/2015 by Sharon Grewal and Kelly Ou)<br>
+  Select an actor or actress.</p>
+
+</div>
+<!--END ADD MOVIE / ACTOR RELATION-->
+
+<!--START ADD MOVIE / DIRECTOR RELATION-->
+<div class="movieInfo tab-pane" role="tabpanel">
+
+  <h1>Movie Info</h1>
+  <p>(Ver 1.0 10/26/2015 by Sharon Grewal and Kelly Ou)<br>
+  Select a movie.</p>
+
+</div>
 <!--END ADD MOVIE / ACTOR RELATION-->
 
 </div>
