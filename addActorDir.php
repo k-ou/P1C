@@ -141,10 +141,11 @@ padding-top: -50px;
   Date of Death (yyyy-mm-dd or leave blank):<br>
   <input type="text" name="dod">
   <br><br>
-  <input type="submit" value="Submit">
+  <input type="submit" name="submit" value="Submit">
 </form>
 
 <?php
+
 $db_connection = mysql_connect("localhost", "cs143", "");
 if(!$db_connection){
    $errmsg = mysql_error($db_connection);
@@ -170,16 +171,75 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
 }
 
 print "position: " . $position . "<br>firstName: " . $firstName;
+print "<br>lastName: " . $lastName . "<br>sex: " . $sex;
+print "<br>dob: " . $dob . "<br>dod: " . $dod;
+print "<br>";
+//check that firstName + lastName contain only letters + ' + -
+//check dob and dod are correct format yyyy-mm-dd
+
+$numpattern = '([0-9]+)';
+$cpattern = '([?_<>,~$%#@]+)';
+
+preg_match($numpattern, $firstName, $nfmatches);
+preg_match($cpattern, $firstName, $cfmatches);
+if(!empty($nfmatches) || !empty($cfmatches)) 
+{
+	print "Invalid expression for first name. Please try again.";
+	exit(1);
+}
+preg_match($numpattern, $lastName, $nlmatches);
+preg_match($cpattern, $lastName, $clmatches);
+
+if(!empty($nlmatches) || !empty($clmatches))
+{
+	print "Invalid expression for last name. Please try again.";
+	exit(1);
+}
+
+if($firstName == "" || $lastName == "")
+{
+	print "You must provide a first and last name.";
+	exit(1);
+}
+
+//check if dod > dob if dod != NULL
+
+//check if that person is already in database using 
+//firstName, lastName, sex, and dob
+$query_check = "SELECT COUNT(*) FROM ".mysql_real_escape_string($position)." 
+WHERE last='".mysql_real_escape_string($lastName)."' AND
+first='".mysql_real_escape_string($firstName)."' AND
+dob='".mysql_real_escape_string($dob)."';";
+
+$check_results = mysql_query($query_check, $db_connection);
+while($print_check = mysql_fetch_assoc($check_results)){
+foreach($print_check as $row)
+	if($row != 0)
+	{
+	 print "This person is already in our database.";
+	 exit(1);
+	}
+}
+
+
+mysql_free_result($check_results);
 
 $updateID = mysql_query("UPDATE MaxPersonID SET id=id+1", $db_connection);
-$query = "INSERT INTO '$position' VALUES ('$updateID', '$firstName', '$lastName', '$sex', '$dob', '$dod')";
+
+$query = "INSERT INTO ".mysql_real_escape_string($position)." 
+VALUES('".mysql_real_escape_string($updateID)."', 
+'".mysql_real_escape_string($firstName)."',
+'".mysql_real_escape_string($lastName)."',
+'".mysql_real_escape_string($sex)."',
+'".mysql_real_escape_string($dob)."',
+'".mysql_real_escape_string($dod)."');";
+
 $result = mysql_query($query, $db_connection);
 
-if ($_GET["Submit"]) {
+if ($_GET["submit"]) {
    if (!$result) {
-   $message  = 'Invalid query: ' . mysql_error() . "\n";
-   $message .= 'Whole query: ' . $query;
-   die($message);
+   print "Insertion failed. <br>";
+   exit(1);
    }
    else {
    print "You've successfully added <br />" . $firstName . " " . $lastName;
@@ -188,6 +248,7 @@ if ($_GET["Submit"]) {
 
 mysql_free_result($result);
 mysql_close($db_connection);
+
 ?>
 
 </div>
