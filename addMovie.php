@@ -186,14 +186,24 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
    $genre = $_GET["genre"];
 }
 
+if($year < 1900 || $year > 2015)
+{
+  print "Invalid year. Please try again.";
+  exit(1);
+}
+
 $updateID = mysql_query("UPDATE MaxMovieID SET id=id+1", $db_connection);
-$query = "INSERT INTO Movie VALUES ('$updateID', '$title', '$year', '$rating', '$company')";
+$query = "INSERT INTO Movie VALUES ('".mysql_real_escape_string($updateID)."',
+  '".mysql_real_escape_string($title)."',
+  '".mysql_real_escape_string($year)."',
+  '".mysql_real_escape_string($rating)."',
+  '".mysql_real_escape_string($company)."');";
+
 $result = mysql_query($query, $db_connection);
 
 if (!$result) {
-    $message  = 'Invalid query: ' . mysql_error() . "\n";
-    $message .= 'Whole query: ' . $query;
-    die($message);
+    print "Insertion failed. <br>";
+    exit(1);
 }
 else {
    print "You've successfully added <br />" . $title;
