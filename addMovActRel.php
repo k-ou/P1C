@@ -122,6 +122,7 @@ padding-top: -50px;
   <p>(Ver 1.0 10/26/2015 by Sharon Grewal and Kelly Ou)<br>
   Input a movie and the actor/actress that took part, as well as their role in the movie.</p>
 
+
 <?php 
 $db_connection = mysql_connect("localhost", "cs143", "");
 if(!$db_connection){
@@ -131,7 +132,48 @@ if(!$db_connection){
 }
 mysql_select_db("TEST", $db_connection);
 
-if ($_SERVER["REQUEST_METHOD"] == "GET") {
+echo "<form action='" . $_SERVER['PHP_SELF'] . "' method='get' id='movActRelForm'>";
+
+// DROPDOWN LIST OF MOVIES
+echo "Movie:<br>";
+$query = "SELECT title, id FROM Movie;";
+$movResult =  mysql_query($query);
+echo "<select form='movActRelForm' name='mov_list'>";
+echo "<option value=''>Select One</option>"; 
+if (!$movResult) {
+    print "Addition failed. <br>";
+    exit(1);
+}
+while ($row = mysql_fetch_array($movResult)) {
+  print "<option value='" . $row['id'] . "'>" . $row['title'] . "</option>";  
+}
+echo "</select>";
+echo "<br><br>";
+
+mysql_free_result($movResult);
+
+// DROPDOWN LIST OF ACTORS/ACTRESSES
+
+echo "Actor/Actress:<br>";
+$query = "SELECT first, last, id FROM Actor;";
+$actResult =  mysql_query($query);
+echo "<select form='movActRelForm' name='actor_list'>";
+echo "<option value=''>Select One</option>"; 
+if (!$actResult) {
+    print "Addition failed. <br>";
+    exit(1);
+}
+while ($row = mysql_fetch_array($actResult)) {
+  print "<option value='" . $row['id'] . "'>" . $row['first'] . " " . $row['last'] . "</option>";  
+}
+echo "</select>";
+echo "<br><br>";
+echo "<input type='submit' name='submit' value='Submit'>";
+
+echo "</form>";
+
+
+/*if ($_SERVER["REQUEST_METHOD"] == "GET") {
    $movie = $_GET["movie"];
    $actorLast = $_GET["actorLast"];
    $actorFirst = $_GET["actorFirst"];
@@ -141,11 +183,11 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
 $mid = mysql_query("SELECT id FROM Movie WHERE Movie.title='$movie'", $db_connection);
 $aid = mysql_query("SELECT id FROM Actor WHERE Actor.last='$actorLast' AND Actor.first='$actorFirst'", $db_connection);
 $query = "INSERT INTO MovieActor VALUES ('$mid', '$aid', '$role')";
-$result = mysql_query($query, $db_connection);
+$result = mysql_query($query, $db_connection);*/
 
-mysql_free_result($result);
-mysql_free_result($mid);
-mysql_free_result($aid);
+mysql_free_result($movResult);
+mysql_free_result($actResult);
+mysql_free_result($row);
 mysql_close($db_connection);
 ?>
 
