@@ -139,7 +139,7 @@ echo "<form action='" . $_SERVER['PHP_SELF'] . "' method='get' id='movDirRelForm
 echo "Movie:<br>";
 $query = "SELECT title, id FROM Movie;";
 $movResult =  mysql_query($query);
-echo "<select form='movDirRelForm' name='mov_list'>";
+echo "<select form='movDirRelForm' name='movie'>";
 echo "<option value=''>Select One</option>"; 
 if (!$movResult) {
     print "Addition failed. <br>";
@@ -156,7 +156,7 @@ echo "<br><br>";
 echo "Director:<br>";
 $query = "SELECT first, last, id FROM Director;";
 $dirResult =  mysql_query($query);
-echo "<select form='movDirRelForm' name='director_list'>";
+echo "<select form='movDirRelForm' name='dirID'>";
 echo "<option value=''>Select One</option>"; 
 if (!$dirResult) {
     print "Addition failed. <br>";
@@ -175,13 +175,12 @@ echo "</form>";
 
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
    $movie = $_GET["movie"];
-   $dirLast = $_GET["dirLast"];
-   $dirFirst = $_GET["dirFirst"];
+   $dirID = $_GET["dirID"];
 }
 
 $mid = mysql_query("SELECT id FROM Movie WHERE Movie.title='$movie'", $db_connection);
-$did = mysql_query("SELECT id FROM Director WHERE Director.last='$dirLast' AND Director.first='$dirFirst'", $db_connection);
-$query = "INSERT INTO MovieDirector VALUES ('$mid', '$did')";
+//$did = mysql_query("SELECT id FROM Director WHERE Director.last='$dirLast' AND Director.first='$dirFirst'", $db_connection);
+$query = "INSERT INTO MovieDirector VALUES ('$mid', '$dirID')";
 $result = mysql_query($query, $db_connection);
 
 mysql_free_result($movResult);
