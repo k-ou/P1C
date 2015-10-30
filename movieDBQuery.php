@@ -158,18 +158,19 @@ if ($_GET["submit"] && !sizeof($print_array)) {
 else {
    print '<table border="1"><tr>';
    foreach(array_keys($print_array) as $col) {
-   print '<td>' . $col . '</td>'; }
+   print '<td>' . $col . '</td>';
+}
    
    //print "<br />";
-   print '</tr>';
+print '</tr>';
 
-   mysql_data_seek($result, 0);
-   while($print_array = mysql_fetch_assoc($result)){
-   print '<tr>';
-   foreach($print_array as $row) {
-   print '<td>' . $row . '</td>'; 
-   }
-   print '</tr>';
+mysql_data_seek($result, 0);
+while($print_array = mysql_fetch_assoc($result)) {
+  print '<tr>';
+  foreach($print_array as $row) {
+    print '<td>' . $row . '</td>'; 
+  }
+  print '</tr>';
 }
 print '</table>';
 }

@@ -6,23 +6,23 @@
 <style>
 
 html, body {
-height: 100%;
+  height: 100%;
 }
 
 .sidebar {
-background-color: #C1C1C1;
-height: 100%;
+  background-color: #C1C1C1;
+  height: 100%;
 }
 
 .tab-content {
-height:100%;
--webkit-box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
--moz-box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
-box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
-padding-top: -50px;
+  height:100%;
+  -webkit-box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
+  -moz-box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
+  box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
+  padding-top: -50px;
 }
 
-.addMovActRel {
+.actorInfo {
   font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 }
 
@@ -112,88 +112,9 @@ padding-top: -50px;
 <div class="col-md-3 sidebar"></div>
 
 <!--MIDSECTION-->
-
 <div class="col-md-6 tab-content">
 
-<!--START ADD MOVIE / ACTOR RELATION-->
-<div class="addMovActRel">
-
-  <h1>Add Movie / Actor Relation</h1>
-  <p>(Ver 1.0 10/26/2015 by Sharon Grewal and Kelly Ou)<br>
-  Input a movie and the actor/actress that took part, as well as their role in the movie.</p>
-
-
-<?php 
-$db_connection = mysql_connect("localhost", "cs143", "");
-if(!$db_connection){
-   $errmsg = mysql_error($db_connection);
-   print "Connection failed: $errmsg <br />";
-   exit(1);
-}
-mysql_select_db("TEST", $db_connection);
-
-echo "<form action='" . $_SERVER['PHP_SELF'] . "' method='get' id='movActRelForm'>";
-
-// DROPDOWN LIST OF MOVIES
-echo "Movie:<br>";
-$query = "SELECT title, id FROM Movie;";
-$movResult =  mysql_query($query);
-echo "<select form='movActRelForm' name='mov_list'>";
-echo "<option value=''>Select One</option>"; 
-if (!$movResult) {
-    print "Addition failed. <br>";
-    exit(1);
-}
-while ($row = mysql_fetch_array($movResult)) {
-  print "<option value='" . $row['id'] . "'>" . $row['title'] . "</option>";  
-}
-echo "</select>";
-echo "<br><br>";
-
-// DROPDOWN LIST OF ACTORS/ACTRESSES
-
-echo "Actor/Actress:<br>";
-$query = "SELECT first, last, id FROM Actor;";
-$actResult =  mysql_query($query);
-echo "<select form='movActRelForm' name='actor_list'>";
-echo "<option value=''>Select One</option>"; 
-if (!$actResult) {
-    print "Addition failed. <br>";
-    exit(1);
-}
-while ($row = mysql_fetch_array($actResult)) {
-  print "<option value='" . $row['id'] . "'>" . $row['first'] . " " . $row['last'] . "</option>";  
-}
-echo "</select>";
-echo "<br><br>";
-echo "<input type='submit' name='submit' value='Submit'>";
-
-echo "</form>";
-
-
-/*if ($_SERVER["REQUEST_METHOD"] == "GET") {
-   $movie = $_GET["movie"];
-   $actorLast = $_GET["actorLast"];
-   $actorFirst = $_GET["actorFirst"];
-   $role = $_GET["role"];
-}
-
-$mid = mysql_query("SELECT id FROM Movie WHERE Movie.title='$movie'", $db_connection);
-$aid = mysql_query("SELECT id FROM Actor WHERE Actor.last='$actorLast' AND Actor.first='$actorFirst'", $db_connection);
-$query = "INSERT INTO MovieActor VALUES ('$mid', '$aid', '$role')";
-$result = mysql_query($query, $db_connection);*/
-
-mysql_free_result($movResult);
-mysql_free_result($actResult);
-mysql_free_result($row);
-mysql_close($db_connection);
-?>
-
 </div>
-<!--END ADD MOVIE / ACTOR RELATION-->
-
-</div>
-
 <!--END MIDSECTION-->
 
 <div class="col-md-3 sidebar"></div>

@@ -131,17 +131,61 @@ if(!$db_connection){
 }
 mysql_select_db("TEST", $db_connection);
 
+/////////////////////////////////////////
+
+echo "<form action='" . $_SERVER['PHP_SELF'] . "' method='get' id='movDirRelForm'>";
+
+// DROPDOWN LIST OF MOVIES
+echo "Movie:<br>";
+$query = "SELECT title, id FROM Movie;";
+$movResult =  mysql_query($query);
+echo "<select form='movDirRelForm' name='movie'>";
+echo "<option value=''>Select One</option>"; 
+if (!$movResult) {
+    print "Addition failed. <br>";
+    exit(1);
+}
+while ($row = mysql_fetch_array($movResult)) {
+  print "<option value='" . $row['id'] . "'>" . $row['title'] . "</option>";  
+}
+echo "</select>";
+echo "<br><br>";
+
+// DROPDOWN LIST OF ACTORS/ACTRESSES
+
+echo "Director:<br>";
+$query = "SELECT first, last, id FROM Director;";
+$dirResult =  mysql_query($query);
+echo "<select form='movDirRelForm' name='dirID'>";
+echo "<option value=''>Select One</option>"; 
+if (!$dirResult) {
+    print "Addition failed. <br>";
+    exit(1);
+}
+while ($row = mysql_fetch_array($dirResult)) {
+  print "<option value='" . $row['id'] . "'>" . $row['first'] . " " . $row['last'] . "</option>";  
+}
+echo "</select>";
+echo "<br><br>";
+echo "<input type='submit' name='submit' value='Submit'>";
+
+echo "</form>";
+
+/////////////////////////////////
+
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
    $movie = $_GET["movie"];
-   $dirLast = $_GET["dirLast"];
-   $dirFirst = $_GET["dirFirst"];
+   $dirID = $_GET["dirID"];
 }
 
-$mid = mysql_query("SELECT id FROM Movie WHERE Movie.title='$movie'", $db_connection);
-$did = mysql_query("SELECT id FROM Director WHERE Director.last='$dirLast' AND Director.first='$dirFirst'", $db_connection);
-$query = "INSERT INTO MovieActor VALUES ('$mid', '$did')";
+//$mid = mysql_query("SELECT id FROM Movie WHERE Movie.title='$movie'", $db_connection);
+//$did = mysql_query("SELECT id FROM Director WHERE Director.id='$dirID'", $db_connection);
+//$query = "INSERT INTO MovieDirector VALUES ('$mid', '$did')";
+$query = "INSERT INTO MovieDirector VALUES ('$movie', '$dirID')";
 $result = mysql_query($query, $db_connection);
 
+mysql_free_result($movResult);
+mysql_free_result($dirResult);
 mysql_free_result($result);
 mysql_free_result($mid);
 mysql_free_result($did);
