@@ -120,7 +120,62 @@ padding-top: -50px;
 
   <h1>Movie Info</h1>
   <p>(Ver 1.0 10/26/2015 by Sharon Grewal and Kelly Ou)<br>
-  Select a movie.</p>
+  Select a movie from the list below to show participating actors and/or actresses,
+  average score based on user ratings, and user comments.</p>
+
+  <?php 
+$db_connection = mysql_connect("localhost", "cs143", "");
+if(!$db_connection){
+   $errmsg = mysql_error($db_connection);
+   print "Connection failed: $errmsg <br />";
+   exit(1);
+}
+mysql_select_db("TEST", $db_connection);
+
+/////////////////////////////////////////
+
+echo "<form action='" . $_SERVER['PHP_SELF'] . "' method='get' id='movDirRelForm'>";
+
+// DROPDOWN LIST OF MOVIES
+echo "Movie:<br>";
+$query = "SELECT title, id FROM Movie;";
+$movResult =  mysql_query($query);
+echo "<select form='movDirRelForm' name='movie'>";
+echo "<option value=''>Select One</option>"; 
+if (!$movResult) {
+    print "Addition failed. <br>";
+    exit(1);
+}
+while ($row = mysql_fetch_array($movResult)) {
+  print "<option value='" . $row['id'] . "'>" . $row['title'] . "</option>";  
+}
+echo "</select>";
+
+echo "<br><br>";
+echo "<input type='submit' name='submit' value='Submit'>";
+
+echo "</form>";
+
+/////////////////////////////////
+
+if ($_SERVER["REQUEST_METHOD"] == "GET") {
+   $movie = $_GET["movie"];
+   $dirID = $_GET["dirID"];
+}
+
+//$mid = mysql_query("SELECT id FROM Movie WHERE Movie.title='$movie'", $db_connection);
+//$did = mysql_query("SELECT id FROM Director WHERE Director.id='$dirID'", $db_connection);
+//$query = "INSERT INTO MovieDirector VALUES ('$mid', '$did')";
+$query = "INSERT INTO MovieDirector VALUES ('$movie', '$dirID')";
+$result = mysql_query($query, $db_connection);
+
+mysql_free_result($movResult);
+mysql_free_result($dirResult);
+mysql_free_result($result);
+mysql_free_result($mid);
+mysql_free_result($did);
+mysql_close($db_connection);
+?>
 
 </div>
 <!--END MOVIE INFO-->

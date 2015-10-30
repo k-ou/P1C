@@ -150,8 +150,6 @@ while ($row = mysql_fetch_array($movResult)) {
 echo "</select>";
 echo "<br><br>";
 
-mysql_free_result($movResult);
-
 // DROPDOWN LIST OF ACTORS/ACTRESSES
 
 echo "Actor/Actress:<br>";
