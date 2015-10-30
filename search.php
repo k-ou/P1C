@@ -116,8 +116,30 @@ html, body {
 
   <h1>Search Results</h1>
   <p>(Ver 1.0 10/26/2015 by Sharon Grewal and Kelly Ou)<br>
-Results get listed here.
-</p>
+  Results get listed here.</p>
+
+  <?php
+
+if(isset($_GET["search"])){
+$db_connection = mysql_connect("localhost", "cs143", "");
+   if(!$db_connection){
+   $errmsg = mysql_error($db_connection);
+   print "Connection failed: $errmsg <br />";
+   exit(1);
+}
+mysql_select_db("TEST", $db_connection);
+$searchQuery= $_GET["search"];
+
+$result = mysql_query($searchQuery, $db_connection);
+
+if ($_GET["submit"] && !sizeof($result)) {
+   print "No answer found.";
+}
+
+mysql_free_result($result);
+mysql_close($db_connection);
+}
+?>
 
 </div>
 <!--END MIDSECTION-->
