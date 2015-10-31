@@ -160,13 +160,12 @@ echo "</form>";
 
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
    $movie = $_GET["movie"];
-   $dirID = $_GET["dirID"];
 }
 
 //$mid = mysql_query("SELECT id FROM Movie WHERE Movie.title='$movie'", $db_connection);
 //$did = mysql_query("SELECT id FROM Director WHERE Director.id='$dirID'", $db_connection);
 //$query = "INSERT INTO MovieDirector VALUES ('$mid', '$did')";
-$query = "INSERT INTO MovieDirector VALUES ('$movie', '$dirID')";
+$query = "SELECT * FROM Movies WHERE id='$movie'";
 $result = mysql_query($query, $db_connection);
 
 mysql_free_result($movResult);
