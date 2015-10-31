@@ -157,22 +157,62 @@ html, body {
 
   echo "</form>";
 
+$aid = $_GET['actor_list'];
 
-/*if ($_SERVER["REQUEST_METHOD"] == "GET") {
-   $movie = $_GET["movie"];
-   $actorLast = $_GET["actorLast"];
-   $actorFirst = $_GET["actorFirst"];
-   $role = $_GET["role"];
+//using aid find actor info
+$aInfo = "SELECT first, last, sex, dob, dod FROM Actor WHERE id='".$aid."';";
+$a_result = mysql_query($aInfo, $db_connection);
+print "Actor/Actress Information: <br>";
+
+
+while($p_act = mysql_fetch_assoc($a_result)){
+	foreach($p_act as $row){
+	print $row . "\t";
+}
+}
+print '<br>';
+
+//find mids using aid
+$find_mid = "SELECT mid FROM MovieActor WHERE aid='".$aid."';";
+
+
+$find_titles = "SELECT title, year FROM Movie WHERE ";
+
+$mid_result = mysql_query($find_mid, $db_connection);
+if(empty($mid_result)){
+	print "No mids found. <br>";
+	exit(1);
+}
+mysql_data_seek($mid_result, 1);
+$num_rows = mysql_num_rows($mid_result);
+while($mid = mysql_fetch_assoc($mid_result)){
+	foreach($mid as $row){
+	$find_titles .= "id='".$row."'";
+	$num_rows = $num_rows - 1;
+}
+	if($num_rows > 1)
+		$find_titles .= " OR ";
+}
+print "<br>";
+//print $find_titles . "<br>";
+
+$titles_result = mysql_query($find_titles, $db_connection);
+if(empty($titles_result)){
+	print "No movie titles found. <br>";
+	exit(1);
 }
 
-$mid = mysql_query("SELECT id FROM Movie WHERE Movie.title='$movie'", $db_connection);
-$aid = mysql_query("SELECT id FROM Actor WHERE Actor.last='$actorLast' AND Actor.first='$actorFirst'", $db_connection);
-$query = "INSERT INTO MovieActor VALUES ('$mid', '$aid', '$role')";
-$result = mysql_query($query, $db_connection);*/
+while($titles = mysql_fetch_assoc($titles_result)){
+	foreach($titles as $row){
+	print $row . "\t";
+}
+	print "<br>";
+}
 
-mysql_free_result($movResult);
+mysql_free_result($titles_result);
+mysql_free_result($mid_result);
 mysql_free_result($actResult);
-mysql_free_result($row);
+mysql_free_result($a_result);
 mysql_close($db_connection);
 ?>
 
