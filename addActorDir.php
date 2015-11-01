@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 
@@ -5,24 +6,34 @@
 <style>
 
 html, body {
-height: 100%;
+  height: 100%;
 }
 
 .sidebar {
-background-color: #C1C1C1;
-height: 100%;
+  background-color: #C1C1C1;
+  height: auto;
+}
+
+.midsection {
+  height: auto;
+  -webkit-box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
+  -moz-box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
+  box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
+  padding-top: 50px;
 }
 
 .tab-content {
-height:100%;
--webkit-box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
--moz-box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
-box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
-padding-top: -50px;
+    padding-bottom: 150px;
 }
 
-.addActorDir {
+.actorInfo {
   font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+}
+
+.footer {
+  padding-top: 50px;
+  padding-bottom: 50px;
+  text-align: center;
 }
 
 </style>
@@ -42,7 +53,7 @@ padding-top: -50px;
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
-<nav class="navbar navbar-inverse">
+<nav class="navbar navbar-inverse navbar-fixed-top">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
@@ -85,7 +96,7 @@ padding-top: -50px;
       <!--IMPLEMENT SEARCH-->
       <form action="./search.php" class="navbar-form navbar-left" role="search">
         <div class="form-group">
-          <input type="text" name="search" class="form-control" placeholder="Search">
+          <input type="text"  name="search" class="form-control" placeholder="Search">
         </div>
         <button type="submit" class="btn btn-default">Submit</button>
       </form>
@@ -112,18 +123,18 @@ padding-top: -50px;
 
 <!--MIDSECTION-->
 
-<div class="col-md-6 tab-content">
+<div class="col-md-6 midsection">
 
 <!--ADD ACTOR / DIR-->
-<div class="addActorDir">
+<div class="addActorDir tab-content">
 
   <h1>Add Actor / Director</h1>
   <p>(Ver 1.0 10/26/2015 by Sharon Grewal and Kelly Ou)<br>
   Add an actor/actress or a director.</p>
 
 <form action="<?php $_SERVER['PHP_SELF'];?>" method="get">
-  <input type="radio" name="position" value="Actor" checked>Actor/Actress
-  <input type="radio" name="position" value="Director">Director
+  <input type="radio" name="position" value="Actor" checked> Actor/Actress
+  <input type="radio" name="position" value="Director"> Director
   <br>
   First name:<br>
   <input type="text" name="firstName">
@@ -132,8 +143,8 @@ padding-top: -50px;
   <input type="text" name="lastName">
   <br>
   Sex:
-  <input type="radio" name="sex" value="female" checked>Female
-  <input type="radio" name="sex" value="male">Male
+  <input type="radio" name="sex" value="female" checked> Female
+  <input type="radio" name="sex" value="male"> Male
   <br>
   Date of Birth (yyyy-mm-dd):<br>
   <input type="text" name="dob">
@@ -154,96 +165,98 @@ if(!$db_connection){
 }
 mysql_select_db("TEST", $db_connection);
 
-$position = "";
-$firstName = "";
-$lastName = "";
-$sex = "";
-$dob = "";
-$dod = "";
+// php only runs if submit button is pressed
+if (isset($_GET["submit"])) {
 
-if ($_SERVER["REQUEST_METHOD"] == "GET") {
-   $position = $_GET["position"];
-   $firstName = $_GET["firstName"];
-   $lastName = $_GET["lastName"];
-   $sex = $_GET["sex"];
-   $dob = $_GET["dob"];
-   $dod = $_GET["dod"]; 
-}
+  $position = "";
+  $firstName = "";
+  $lastName = "";
+  $sex = "";
+  $dob = "";
+  $dod = "";
 
-print "position: " . $position . "<br>firstName: " . $firstName;
-print "<br>lastName: " . $lastName . "<br>sex: " . $sex;
-print "<br>dob: " . $dob . "<br>dod: " . $dod;
-print "<br>";
-//check that firstName + lastName contain only letters + ' + -
-//check dob and dod are correct format yyyy-mm-dd
-
-$numpattern = '([0-9]+)';
-$cpattern = '([?_<>,~$%#@]+)';
-
-preg_match($numpattern, $firstName, $nfmatches);
-preg_match($cpattern, $firstName, $cfmatches);
-if(!empty($nfmatches) || !empty($cfmatches)) 
-{
-	print "Invalid expression for first name. Please try again.";
-	exit(1);
-}
-preg_match($numpattern, $lastName, $nlmatches);
-preg_match($cpattern, $lastName, $clmatches);
-
-if(!empty($nlmatches) || !empty($clmatches)) {
-	print "Invalid expression for last name. Please try again.";
-	exit(1);
-}
-
-if($firstName == "" || $lastName == "") {
-	print "You must provide a first and last name.";
-	exit(1);
-}
-
-//check if dod > dob if dod != NULL
-
-//check if that person is already in database using 
-//firstName, lastName, sex, and dob
-$query_check = "SELECT COUNT(*) FROM " . mysql_real_escape_string($position) . " 
-WHERE last='" . mysql_real_escape_string($lastName) . "' AND
-first='" . mysql_real_escape_string($firstName) . "' AND
-dob='" . mysql_real_escape_string($dob) . "';";
-
-$check_results = mysql_query($query_check, $db_connection);
-while($print_check = mysql_fetch_assoc($check_results)){
-  foreach($print_check as $row) {
-    if($row != 0) {
-      print "This person is already in our database.";
-      exit(1);
-    }
+  if ($_SERVER["REQUEST_METHOD"] == "GET") {
+    $position = $_GET["position"];
+    $firstName = $_GET["firstName"];
+    $lastName = $_GET["lastName"];
+    $sex = $_GET["sex"];
+    $dob = $_GET["dob"];
+    $dod = $_GET["dod"]; 
   }
-}
 
-mysql_free_result($check_results);
+  print "position: " . $position . "<br>firstName: " . $firstName;
+  print "<br>lastName: " . $lastName . "<br>sex: " . $sex;
+  print "<br>dob: " . $dob . "<br>dod: " . $dod;
+  print "<br>";
+  //check that firstName + lastName contain only letters + ' + -
+  //check dob and dod are correct format yyyy-mm-dd
 
-$updateID = mysql_query("UPDATE MaxPersonID SET id=id+1", $db_connection);
+  $numpattern = '([0-9]+)';
+  $cpattern = '([?_<>,~$%#@]+)';
 
-$query = "INSERT INTO " . mysql_real_escape_string($position) . " 
-VALUES('" . mysql_real_escape_string($updateID) . "', 
-'" . mysql_real_escape_string($firstName) . "',
-'" . mysql_real_escape_string($lastName) . "',
-'" . mysql_real_escape_string($sex) . "',
-'" . mysql_real_escape_string($dob) . "',
-'" . mysql_real_escape_string($dod) . "');";
-
-$result = mysql_query($query, $db_connection);
-
-if ($_GET["submit"]) {
-  if (!$result) {
-    print "Insertion failed. <br>";
+  preg_match($numpattern, $firstName, $nfmatches);
+  preg_match($cpattern, $firstName, $cfmatches);
+  if (!empty($nfmatches) || !empty($cfmatches)) {
+    print "Invalid expression for first name. Please try again.";
     exit(1);
   }
-  else {
-  print "You've successfully added <br />" . $firstName . " " . $lastName;
+  preg_match($numpattern, $lastName, $nlmatches);
+  preg_match($cpattern, $lastName, $clmatches);
+  if (!empty($nlmatches) || !empty($clmatches)) {
+    print "Invalid expression for last name. Please try again.";
+    exit(1);
   }
-}
 
-mysql_free_result($result);
+  if($firstName == "" || $lastName == "") {
+    print "You must provide a first and last name.";
+    exit(1);
+  }
+
+  //check if dod > dob if dod != NULL
+
+  //check if that person is already in database using 
+  //firstName, lastName, sex, and dob
+  $query_check = "SELECT COUNT(*) FROM " . mysql_real_escape_string($position) . " 
+  WHERE last='" . mysql_real_escape_string($lastName) . "' AND
+  first='" . mysql_real_escape_string($firstName) . "' AND
+  dob='" . mysql_real_escape_string($dob) . "';";
+
+  $check_results = mysql_query($query_check, $db_connection);
+  while($print_check = mysql_fetch_assoc($check_results)){
+    foreach($print_check as $row) {
+      if($row != 0) {
+        print "This person is already in our database.";
+        exit(1);
+      }
+    }
+  }
+
+  mysql_free_result($check_results);
+
+  $updateID = mysql_query("UPDATE MaxPersonID SET id=id+1", $db_connection);
+
+  $query = "INSERT INTO " . mysql_real_escape_string($position) . " 
+  VALUES('" . mysql_real_escape_string($updateID) . "', 
+  '" . mysql_real_escape_string($firstName) . "',
+  '" . mysql_real_escape_string($lastName) . "',
+  '" . mysql_real_escape_string($sex) . "',
+  '" . mysql_real_escape_string($dob) . "',
+  '" . mysql_real_escape_string($dod) . "');";
+
+  $result = mysql_query($query, $db_connection);
+
+  if ($_GET["submit"]) {
+    if (!$result) {
+      print "Insertion failed. <br>";
+      exit(1);
+    }
+    else {
+    print "You've successfully added <br />" . $firstName . " " . $lastName;
+    }
+  }
+
+  mysql_free_result($result);
+}
 mysql_close($db_connection);
 
 ?>
@@ -251,12 +264,18 @@ mysql_close($db_connection);
 </div>
 <!--END ADD ACTOR / DIR-->
 
-</div>
+<hr>
 
+<!--FOOTER-->
+<div class="footer">
+  <p>(Ver 1.0 10/26/2015 by Sharon Grewal and Kelly Ou)<br></p>
+</div>
+<!--END FOOTER-->
+
+</div>
 <!--END MIDSECTION-->
 
 <div class="col-md-3 sidebar"></div>
-
 <!--END CONTENT-->
 
 </body>

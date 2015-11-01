@@ -11,19 +11,29 @@ html, body {
 
 .sidebar {
   background-color: #C1C1C1;
-  height: 100%;
+  height: auto;
 }
 
-.tab-content {
-  height:100%;
+.midsection {
+  height: auto;
   -webkit-box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
   -moz-box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
   box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
-  padding-top: -50px;
+  padding-top: 50px;
+}
+
+.tab-content {
+    padding-bottom: 150px;
 }
 
 .actorInfo {
   font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+}
+
+.footer {
+  padding-top: 50px;
+  padding-bottom: 50px;
+  text-align: center;
 }
 
 </style>
@@ -43,7 +53,7 @@ html, body {
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
-<nav class="navbar navbar-inverse">
+<nav class="navbar navbar-inverse navbar-fixed-top">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
@@ -83,16 +93,13 @@ html, body {
       </li>
   <!--end dropdown-->
       </ul>
-
       <!--IMPLEMENT SEARCH-->
       <form action="./search.php" class="navbar-form navbar-left" role="search">
         <div class="form-group">
-          <input type="text" name="search" class="form-control" placeholder="Search">
+          <input type="text"  name="search" class="form-control" placeholder="Search">
         </div>
         <button type="submit" class="btn btn-default">Submit</button>
       </form>
-      <!--END SEARCH-->
-
       <ul class="nav navbar-nav navbar-right">
         <li><a href="./movieDBQuery.php">Enter Query</a></li>
         <li class="dropdown">
@@ -111,15 +118,13 @@ html, body {
 </nav>
 
 <!--CONTENT-->
-
 <div class="col-md-3 sidebar"></div>
 
 <!--MIDSECTION-->
-
-<div class="col-md-6 tab-content">
+<div class="col-md-6 midsection">
 
 <!--START ACTOR / ACTRESS INFO-->
-<div class="actorInfo">
+<div class="actorInfo tab-content">
 
   <h1>Actor / Actress Info</h1>
   <p>(Ver 1.0 10/26/2015 by Sharon Grewal and Kelly Ou)<br>
@@ -156,6 +161,9 @@ html, body {
   echo "<input type='submit' name='submit' value='Submit'>";
 
   echo "</form>";
+
+// php only runs if submit button is pressed
+if (isset($_GET["submit"])) {
 
 $aid = $_GET['actor_list'];
 
@@ -215,12 +223,11 @@ print "<br>";
 
 // find titles
 $titles_result = mysql_query($find_titles, $db_connection);
-if (empty($titles_result)) {
-  print "No movie titles found. <br>";
-	exit(1);
-}
 
 print "<h4>Movies acted in: </h4>";
+if (empty($titles_result)) {
+  print "No movie titles found. <br>";
+}
 
 while($titles = mysql_fetch_assoc($titles_result)){
   foreach($titles as $type => $row){
@@ -242,18 +249,25 @@ mysql_free_result($titles_result);
 mysql_free_result($mid_result);
 mysql_free_result($actResult);
 mysql_free_result($a_result);
+}
 mysql_close($db_connection);
 ?>
 
 </div>
 <!--END ACTOR / ACTRESS INFO-->
 
-</div>
+<hr>
 
+<!--FOOTER-->
+<div class="footer">
+  <p>(Ver 1.0 10/26/2015 by Sharon Grewal and Kelly Ou)<br></p>
+</div>
+<!--END FOOTER-->
+
+</div>
 <!--END MIDSECTION-->
 
 <div class="col-md-3 sidebar"></div>
-
 <!--END CONTENT-->
 
 </body>

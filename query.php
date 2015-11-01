@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 
@@ -10,21 +11,35 @@ html, body {
 
 .sidebar {
   background-color: #C1C1C1;
-  height: 100%;
-}
-
-.tab-content {
-  height:100%;
-  -webkit-box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
-  -moz-box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
-  box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
-  padding-top: -50px;
+  height: auto;
 }
 
 .jumbotron {
-  padding: 40px;
+  min-height: 70%;
+  padding-left: 50px;
+  padding-right: 50px;
+}
+
+.midsection {
   height: 100%;
+  -webkit-box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
+  -moz-box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
+  box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
+  padding-top: 50px;
+}
+
+.tab-content {
+    padding-bottom: 150px;
+}
+
+.actorInfo {
   font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+}
+
+.footer {
+  padding-top: 50px;
+  padding-bottom: 50px;
+  text-align: center;
 }
 
 </style>
@@ -44,7 +59,7 @@ html, body {
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
-<nav class="navbar navbar-inverse">
+<nav class="navbar navbar-inverse navbar-fixed-top">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
@@ -87,7 +102,7 @@ html, body {
       <!--IMPLEMENT SEARCH-->
       <form action="./search.php" class="navbar-form navbar-left" role="search">
         <div class="form-group">
-          <input type="text" name="search" class="form-control" placeholder="Search">
+          <input type="text"  name="search" class="form-control" placeholder="Search">
         </div>
         <button type="submit" class="btn btn-default">Submit</button>
       </form>
@@ -114,7 +129,7 @@ html, body {
 
 <!--MIDSECTION-->
 
-<div class="col-md-6 tab-content">
+<div class="col-md-6 midsection">
 
 <div class="jumbotron">
   <h1>Welcome to IMDB.</h1>
@@ -122,12 +137,18 @@ html, body {
   <p><a class="btn btn-primary btn-lg" href="https://github.com/k-ou/P1C" role="button">Learn more</a></p>
 </div>
 
-</div>
+<hr>
 
+<!--FOOTER-->
+<div class="footer">
+  <p>(Ver 1.0 10/26/2015 by Sharon Grewal and Kelly Ou)<br></p>
+</div>
+<!--END FOOTER-->
+
+</div>
 <!--END MIDSECTION-->
 
 <div class="col-md-3 sidebar"></div>
-
 <!--END CONTENT-->
 
 </body>

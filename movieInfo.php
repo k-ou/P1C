@@ -6,24 +6,34 @@
 <style>
 
 html, body {
-height: 100%;
+  height: 100%;
 }
 
 .sidebar {
-background-color: #C1C1C1;
-height: 100%;
+  background-color: #C1C1C1;
+  height: auto;
+}
+
+.midsection {
+  height: auto;
+  -webkit-box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
+  -moz-box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
+  box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
+  padding-top: 50px;
 }
 
 .tab-content {
-height:100%;
--webkit-box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
--moz-box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
-box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
-padding-top: -50px;
+    padding-bottom: 150px;
 }
 
-.movieInfo {
+.actorInfo {
   font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+}
+
+.footer {
+  padding-top: 50px;
+  padding-bottom: 50px;
+  text-align: center;
 }
 
 </style>
@@ -43,7 +53,7 @@ padding-top: -50px;
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
-<nav class="navbar navbar-inverse">
+<nav class="navbar navbar-inverse navbar-fixed-top">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
@@ -86,7 +96,7 @@ padding-top: -50px;
       <!--IMPLEMENT SEARCH-->
       <form action="./search.php" class="navbar-form navbar-left" role="search">
         <div class="form-group">
-          <input type="text" name="search" class="form-control" placeholder="Search">
+          <input type="text"  name="search" class="form-control" placeholder="Search">
         </div>
         <button type="submit" class="btn btn-default">Submit</button>
       </form>
@@ -108,22 +118,20 @@ padding-top: -50px;
 </nav>
 
 <!--CONTENT-->
-
 <div class="col-md-3 sidebar"></div>
 
 <!--MIDSECTION-->
-
-<div class="col-md-6 tab-content">
+<div class="col-md-6 midsection">
 
 <!--START MOVIE INFO-->
-<div class="movieInfo">
+<div class="movieInfo tab-content">
 
   <h1>Movie Info</h1>
   <p>(Ver 1.0 10/26/2015 by Sharon Grewal and Kelly Ou)<br>
   Select a movie from the list below to show participating actors and/or actresses,
   average score based on user ratings, and user comments.</p>
 
-  <?php 
+<?php 
 $db_connection = mysql_connect("localhost", "cs143", "");
 if(!$db_connection){
    $errmsg = mysql_error($db_connection);
@@ -161,6 +169,9 @@ echo "</form>";
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
    $movie = $_GET["movie"];
 }
+
+// php only runs if submit button is pressed
+if (isset($_GET["submit"])) {
 
 //using aid find actor info
 $movInfo = "SELECT title, year, rating, company FROM Movie WHERE id='" . $movie . "';";
@@ -220,7 +231,6 @@ print "<br>";
 $act_result = mysql_query($find_act, $db_connection);
 if (empty($act_result)) {
   print "No actors or actresses found. <br>";
-  exit(1);
 }
 
 print "<h4>Actors and actresses in this movie: </h4>";
@@ -245,18 +255,25 @@ mysql_free_result($dirResult);
 mysql_free_result($result);
 mysql_free_result($mid);
 mysql_free_result($did);
+}
 mysql_close($db_connection);
 ?>
 
 </div>
 <!--END MOVIE INFO-->
 
-</div>
+<hr>
 
+<!--FOOTER-->
+<div class="footer">
+  <p>(Ver 1.0 10/26/2015 by Sharon Grewal and Kelly Ou)<br></p>
+</div>
+<!--END FOOTER-->
+
+</div>
 <!--END MIDSECTION-->
 
 <div class="col-md-3 sidebar"></div>
-
 <!--END CONTENT-->
 
 </body>

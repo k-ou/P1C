@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 
@@ -5,24 +6,34 @@
 <style>
 
 html, body {
-height: 100%;
+  height: 100%;
 }
 
 .sidebar {
-background-color: #C1C1C1;
-height: 100%;
+  background-color: #C1C1C1;
+  height: auto;
+}
+
+.midsection {
+  height: auto;
+  -webkit-box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
+  -moz-box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
+  box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
+  padding-top: 50px;
 }
 
 .tab-content {
-height:100%;
--webkit-box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
--moz-box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
-box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
-padding-top: -50px;
+    padding-bottom: 150px;
 }
 
-.addMovie {
+.actorInfo {
   font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+}
+
+.footer {
+  padding-top: 50px;
+  padding-bottom: 50px;
+  text-align: center;
 }
 
 </style>
@@ -42,7 +53,7 @@ padding-top: -50px;
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
-<nav class="navbar navbar-inverse">
+<nav class="navbar navbar-inverse navbar-fixed-top">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
@@ -85,7 +96,7 @@ padding-top: -50px;
       <!--IMPLEMENT SEARCH-->
       <form action="./search.php" class="navbar-form navbar-left" role="search">
         <div class="form-group">
-          <input type="text" name="search" class="form-control" placeholder="Search">
+          <input type="text"  name="search" class="form-control" placeholder="Search">
         </div>
         <button type="submit" class="btn btn-default">Submit</button>
       </form>
@@ -107,18 +118,15 @@ padding-top: -50px;
 </nav>
 
 <!--CONTENT-->
-
 <div class="col-md-3 sidebar"></div>
 
 <!--MIDSECTION-->
-
-<div class="col-md-6 tab-content">
+<div class="col-md-6 midsection">
 
   <!--ADD MOVIE-->
-<div class="addMovie">
+<div class="addMovie tab-content">
 
   <h1>Add Movie</h1>
-  <p>(Ver 1.0 10/26/2015 by Sharon Grewal and Kelly Ou)<br>
   <p>Add New Movie:</p>
 
 <!--<form action="<?php $_SERVER['PHP_SELF'];?>" method="get">-->
@@ -140,24 +148,24 @@ padding-top: -50px;
     <option value="surrendere">surrendere</option>
   </select><br/>
     Genre:<br>
-  <input type="checkbox" name="action">Action<br>
-    <input type="checkbox" name="adult">Adult<br>
-    <input type="checkbox" name="adventure">Adventure<br>
-    <input type="checkbox" name="animation">Animation<br>
-    <input type="checkbox" name="comedy">Comedy<br>
-    <input type="checkbox" name="crime">Crime<br>
-    <input type="checkbox" name="documentary">Documentary<br>
-    <input type="checkbox" name="family">Family<br>
-    <input type="checkbox" name="fantasy">Fantasy<br>
-    <input type="checkbox" name="horror">Horror<br>
-    <input type="checkbox" name="musical">Musical<br>
-    <input type="checkbox" name="myster">Mystery<br>
-    <input type="checkbox" name="romance">Romance<br>
-    <input type="checkbox" name="sci-fi">Sci-Fi<br>
-    <input type="checkbox" name="short">Short<br>
-    <input type="checkbox" name="thriller">Thriller<br>
-    <input type="checkbox" name="war">War<br>
-    <input type="checkbox" name="western">Western<br>
+  <input type="checkbox" name="action"> Action<br>
+    <input type="checkbox" name="adult"> Adult<br>
+    <input type="checkbox" name="adventure"> Adventure<br>
+    <input type="checkbox" name="animation"> Animation<br>
+    <input type="checkbox" name="comedy"> Comedy<br>
+    <input type="checkbox" name="crime"> Crime<br>
+    <input type="checkbox" name="documentary"> Documentary<br>
+    <input type="checkbox" name="family"> Family<br>
+    <input type="checkbox" name="fantasy"> Fantasy<br>
+    <input type="checkbox" name="horror"> Horror<br>
+    <input type="checkbox" name="musical"> Musical<br>
+    <input type="checkbox" name="myster"> Mystery<br>
+    <input type="checkbox" name="romance"> Romance<br>
+    <input type="checkbox" name="sci-fi"> Sci-Fi<br>
+    <input type="checkbox" name="short"> Short<br>
+    <input type="checkbox" name="thriller"> Thriller<br>
+    <input type="checkbox" name="war"> War<br>
+    <input type="checkbox" name="western"> Western<br>
   <br><br>
   <input type="submit" value="Submit">
 </form>
@@ -170,6 +178,9 @@ if(!$db_connection){
 	exit(1);
 }
 mysql_select_db("TEST", $db_connection);
+
+// php only runs if submit button is pressed
+if (isset($_GET["submit"])) {
 
 $id = "";
 $title = "";
@@ -210,6 +221,7 @@ else {
 }
 
 mysql_free_result($result);
+}
 mysql_close($db_connection);
 
 ?>
@@ -217,12 +229,18 @@ mysql_close($db_connection);
 </div>
 <!--END ADD MOVIE-->
 
-</div>
+<hr>
 
+<!--FOOTER-->
+<div class="footer">
+  <p>(Ver 1.0 10/26/2015 by Sharon Grewal and Kelly Ou)<br></p>
+</div>
+<!--END FOOTER-->
+
+</div>
 <!--END MIDSECTION-->
 
 <div class="col-md-3 sidebar"></div>
-
 <!--END CONTENT-->
 
 </body>
