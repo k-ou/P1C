@@ -118,78 +118,78 @@ html, body {
   <p>(Ver 1.0 10/26/2015 by Sharon Grewal and Kelly Ou)<br>
   Results get listed here.</p>
 
-  <?php
+<?php
 
-if(isset($_GET["search"])){
-$db_connection = mysql_connect("localhost", "cs143", "");
-   if(!$db_connection){
-   $errmsg = mysql_error($db_connection);
-   print "Connection failed: $errmsg <br />";
-   exit(1);
-}
-mysql_select_db("TEST", $db_connection);
-$searchQuery= $_GET["search"];
-
-
-$search_list = explode(' ', $searchQuery);
-
-$actorQuery = 'SELECT id, first, last, dob FROM Actor WHERE 1 ';
-$dirQuery = 'SELECT id, first, last, dob FROM Director WHERE 1 ';
-$mQuery = 'SELECT id, title, year FROM Movie WHERE 1 AND Movie.title LIKE
-"%' . $searchQuery . '%"';
+if (isset($_GET["search"])) {
+  $db_connection = mysql_connect("localhost", "cs143", "");
+  if (!$db_connection) {
+    $errmsg = mysql_error($db_connection);
+    print "Connection failed: $errmsg <br />";
+    exit(1);
+  }
+  mysql_select_db("TEST", $db_connection);
+  $searchQuery= $_GET["search"];
 
 
-foreach($search_list as $single)
-{
-	$actorQuery .= ' AND (Actor.first LIKE "%'. $single .'%" OR Actor.last 
-LIKE "%'. $single .'%")';
+  $search_list = explode(' ', $searchQuery);
 
-	$dirQuery .= ' AND (Director.first LIKE "%'. $single . '%" 
-OR Director.last LIKE "%' . $single . '%")';
+  $actorQuery = 'SELECT id, first, last, dob FROM Actor WHERE 1 ';
+  $dirQuery = 'SELECT id, first, last, dob FROM Director WHERE 1 ';
+  $mQuery = 'SELECT id, title, year FROM Movie WHERE 1 AND Movie.title LIKE
+  "%' . $searchQuery . '%"';
+
+
+  foreach($search_list as $single)
+  {
+    $actorQuery .= ' AND (Actor.first LIKE "%'. $single .'%" OR Actor.last 
+    LIKE "%'. $single .'%")';
+
+    $dirQuery .= ' AND (Director.first LIKE "%'. $single . '%" 
+    OR Director.last LIKE "%' . $single . '%")';
 	
-}
-
-print "<h3>Actors/Actresses Search Results: <br></h3>";
-
-$a_result = mysql_query($actorQuery, $db_connection);
-while($p_actors = mysql_fetch_assoc($a_result)){
-	foreach($p_actors as $row){
-    print  $row . "\t";
   }
-	print '<br>';
-}
 
-print '<br>';
+  print "<h3>Actors/Actresses Search Results: <br></h3>";
 
-print "<h3>Director Search Results: <br></h3>";
-$d_result = mysql_query($dirQuery, $db_connection);
-mysql_data_seek($d_result, 1);
-while($p_dir = mysql_fetch_assoc($d_result)){
-	foreach($p_dir as $row){
-    print $row . "\t";
+  $a_result = mysql_query($actorQuery, $db_connection);
+  while($p_actors = mysql_fetch_assoc($a_result)){
+    foreach($p_actors as $row){
+      print  $row . "\t";
+    }
+    print '<br>';
   }
-	print '<br>';
-}
-print '<br>';
 
-print "<h3>Movie Search Results: <br></h3>";
-$m_result = mysql_query($mQuery, $db_connection);
-mysql_data_seek($m_result, 1);
-while($p_mov = mysql_fetch_assoc($m_result)){
-	foreach($p_mov as $row){
-    print $row . "\t";
+  print '<br>';
+
+  print "<h3>Director Search Results: <br></h3>";
+  $d_result = mysql_query($dirQuery, $db_connection);
+  mysql_data_seek($d_result, 1);
+  while($p_dir = mysql_fetch_assoc($d_result)){
+    foreach($p_dir as $row){
+      print $row . "\t";
+    }
+    print '<br>';
   }
-	print '<br>';
-}
-print '<br>';
+  print '<br>';
+
+  print "<h3>Movie Search Results: <br></h3>";
+  $m_result = mysql_query($mQuery, $db_connection);
+  mysql_data_seek($m_result, 1);
+  while($p_mov = mysql_fetch_assoc($m_result)){
+    foreach($p_mov as $row){
+      print $row . "\t";
+    }
+    print '<br>';
+  }
+  print '<br>';
 
 
-if ($_GET["submit"] && !sizeof($result)) {
-   print "No answer found.";
-}
+  if ($_GET["submit"] && !sizeof($result)) {
+    print "No answer found.";
+  }
 
-mysql_free_result($result);
-mysql_close($db_connection);
+  mysql_free_result($result);
+  mysql_close($db_connection);
 }
 ?>
 

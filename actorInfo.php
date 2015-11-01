@@ -85,7 +85,7 @@ html, body {
       </ul>
 
       <!--IMPLEMENT SEARCH-->
-      <form class="navbar-form navbar-left" role="search">
+      <form action="./search.php" class="navbar-form navbar-left" role="search">
         <div class="form-group">
           <input type="text" name="search" class="form-control" placeholder="Search">
         </div>
@@ -203,7 +203,7 @@ if(empty($mid_result)){
 mysql_data_seek($mid_result, 1);
 $num_rows = mysql_num_rows($mid_result);
 while($mid = mysql_fetch_assoc($mid_result)){
-  foreach($mid as $row){
+  foreach ($mid as $row) {
     $find_titles .= "id='" . $row . "'";
     $num_rows = $num_rows - 1;
   }
