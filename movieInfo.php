@@ -259,6 +259,13 @@ mysql_free_result($did);
 mysql_close($db_connection);
 ?>
 
+<form action="./comments.php?id=" method="GET">
+<p>
+  <input type="hidden" name="id" value ="<?php echo $input; ?>"/>
+  <input type="submit" value="Add Review!" />
+</p>
+</form>
+
 </div>
 <!--END MOVIE INFO-->
 
