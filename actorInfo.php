@@ -218,10 +218,6 @@ if (empty($titles_result)) {
 	exit(1);
 }
 
-$find_mid = "SELECT mid, role FROM MovieActor WHERE aid='" . $aid . "';";
-
-$find_titles = "SELECT title, year FROM Movie WHERE ";
-
 print "<h4>Movies acted in: </h4>";
 
 while($titles = mysql_fetch_assoc($titles_result)){
