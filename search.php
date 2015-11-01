@@ -20,15 +20,14 @@ html, body {
   -moz-box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
   box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
   padding-top: 50px;
+  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 }
 
 .tab-content {
-    min-height: 400px;
-    padding-bottom: 150px;
-}
-
-.actorInfo {
-  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+  padding-top: 10px;
+  padding-bottom: 150px;
+  padding-left: 35px;
+  padding-right: 35px;
 }
 
 .footer {

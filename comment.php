@@ -13,16 +13,26 @@ background-color: #C1C1C1;
 height: 100%;
 }
 
-.tab-content {
-height:100%;
--webkit-box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
--moz-box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
-box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
-padding-top: -50px;
+.midsection {
+  height: auto;
+  -webkit-box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
+  -moz-box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
+  box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
+  padding-top: 50px;
+  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 }
 
-.addActorDir {
-  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+.tab-content {
+  padding-top: 10px;
+  padding-bottom: 150px;
+  padding-left: 35px;
+  padding-right: 35px;
+}
+
+.footer {
+  padding-top: 50px;
+  padding-bottom: 50px;
+  text-align: center;
 }
 
 </style>
@@ -117,43 +127,57 @@ padding-top: -50px;
 <!--ADD COMMENT-->
 <div class="addComment">
 
-<?php
-if($_GET["id"]){
-  $movieid = $_GET["id"];
-  $db_connection = mysql_connect("localhost", "cs143", "");
-  if (!$db_connection) {
-    $errmsg = mysql_error($db_connection);
-    print "Connection failed: $errmsg <br />";
-    exit(1);
-  }
-  mysql_select_db("TEST", $db_connection);
-  
-  $query = "SELECT title, id FROM Movie WHERE id = " . $movieid . ";";
-  $mov = mysql_query($query, $db_connection);  
-  if ($mov) {
-    $r = mysql_fetch_row($mov);
-?>
+<?php 
+$db_connection = mysql_connect("localhost", "cs143", "");
+if (!$db_connection) {
+  $errmsg = mysql_error($db_connection);
+  print "Connection failed: $errmsg <br />";
+  exit(1);
+}
+mysql_select_db("TEST", $db_connection);
 
-<form method="post">
-<p><h2>Review "<?php echo "<a href='./movies.php?id=$r[1]'><u>" .$r[0]. "</u></a>";?>"</h2><br/></p>
-<p>Your Name: <input type="text" name="name" maxlength="20"/><br /></p>
-<p>
+print "<form action='" . $_SERVER['PHP_SELF'] . "' method='get' id='commentForm'>";
+
+print "Movie Review:<br>";
+print $id;
+$query = "SELECT id, title FROM Movie WHERE id = " . $movie . ";";
+$movResult = mysql_query($query, $db_connection);
+if (!$movResult) {
+  print "Addition failed. <br>";
+  exit(1);
+}
+print "<p><h4>Review ";
+while ($row = mysql_fetch_array($movResult)) {
+  print "<a href='./movies.php?id=" . $row['id'] . "'>" . $row['title'] . "</a>";
+}
+print "</h4><br>
+  Your Name: <input type='text' name='name' maxlength='20'><br>
   Rating:
-  <select name="rating">
+  <select name='rating'>
     <option value=5>5 (Excellent)</option>
     <option value=4>4 (Good)</option>
     <option value=3>3 (Okay)</option>
     <option value=2>2 (Poor)</option>
     <option value=1>1 (Terrible)</option>
   </select>
+  Comments: <br>
+  <textarea name='comment' cols='50' rows='6' maxlength='500' 
+  placeholder='Max length: 500 characters'></textarea>
+  <input type='submit' name = 'submit' value='Add Review'>
 </p>
-<p>Comments: <br/>
-<textarea name="cmmt" cols="60" rows="8" maxlength="500" placeholder="Max length: 500 characters"></textarea></p>
-<p><input type="submit" value="Add Review"></p>
-</form>
+</form>";
+
+mysql_close($db_connection);
+?>
 
 </div>
 <!--END ADD COMMENT-->
+
+<!--FOOTER-->
+<div class="footer">
+  <p>(Ver 1.0 10/26/2015 by Sharon Grewal and Kelly Ou)<br></p>
+</div>
+<!--END FOOTER-->
 
 </div>
 <!--END MIDSECTION-->

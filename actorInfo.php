@@ -20,14 +20,14 @@ html, body {
   -moz-box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
   box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
   padding-top: 50px;
+  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 }
 
 .tab-content {
-    padding-bottom: 150px;
-}
-
-.actorInfo {
-  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+  padding-top: 10px;
+  padding-bottom: 150px;
+  padding-left: 35px;
+  padding-right: 35px;
 }
 
 .footer {
@@ -140,14 +140,13 @@ html, body {
   }
   mysql_select_db("TEST", $db_connection);
 
-  echo "<form action='" . $_SERVER['PHP_SELF'] . "' method='get' id='movActRelForm'>";
+  echo "<form action='" . $_SERVER['PHP_SELF'] . "' method='get' id='actorForm'>";
 
   // DROPDOWN LIST OF ACTORS/ACTRESSES
-
   echo "Actor/Actress:<br>";
   $query = "SELECT first, last, id FROM Actor;";
   $actResult =  mysql_query($query);
-  echo "<select form='movActRelForm' name='actor_list'>";
+  echo "<select form='actorForm' name='actor_list'>";
   echo "<option value=''>Select One</option>"; 
   if (!$actResult) {
     print "Addition failed. <br>";
