@@ -252,11 +252,9 @@ mysql_close($db_connection);
 <!--END ADD ACTOR / DIR-->
 
 </div>
-
 <!--END MIDSECTION-->
 
 <div class="col-md-3 sidebar"></div>
-
 <!--END CONTENT-->
 
 </body>

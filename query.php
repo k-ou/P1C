@@ -14,7 +14,7 @@ html, body {
 }
 
 .tab-content {
-  height:100%;
+  height: 100%;
   -webkit-box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
   -moz-box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
   box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);

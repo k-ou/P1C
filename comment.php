@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 
@@ -22,7 +21,7 @@ box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
 padding-top: -50px;
 }
 
-.movieInfo {
+.addActorDir {
   font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 }
 
@@ -115,155 +114,51 @@ padding-top: -50px;
 
 <div class="col-md-6 tab-content">
 
-<!--START MOVIE INFO-->
-<div class="movieInfo">
+<!--ADD COMMENT-->
+<div class="addComment">
 
-  <h1>Movie Info</h1>
-  <p>(Ver 1.0 10/26/2015 by Sharon Grewal and Kelly Ou)<br>
-  Select a movie from the list below to show participating actors and/or actresses,
-  average score based on user ratings, and user comments.</p>
-
-  <?php 
-$db_connection = mysql_connect("localhost", "cs143", "");
-if(!$db_connection){
-   $errmsg = mysql_error($db_connection);
-   print "Connection failed: $errmsg <br />";
-   exit(1);
-}
-mysql_select_db("TEST", $db_connection);
-
-/////////////////////////////////////////
-
-echo "<form action='" . $_SERVER['PHP_SELF'] . "' method='get' id='movDirRelForm'>";
-
-// DROPDOWN LIST OF MOVIES
-echo "Movie:<br>";
-$query = "SELECT title, id FROM Movie;";
-$movResult =  mysql_query($query);
-echo "<select form='movDirRelForm' name='movie'>";
-echo "<option value=''>Select One</option>"; 
-if (!$movResult) {
-    print "Addition failed. <br>";
+<?php
+if($_GET["id"]){
+  $movieid = $_GET["id"];
+  $db_connection = mysql_connect("localhost", "cs143", "");
+  if (!$db_connection) {
+    $errmsg = mysql_error($db_connection);
+    print "Connection failed: $errmsg <br />";
     exit(1);
-}
-while ($row = mysql_fetch_array($movResult)) {
-  print "<option value='" . $row['id'] . "'>" . $row['title'] . "</option>";  
-}
-echo "</select>";
-
-echo "<br><br>";
-echo "<input type='submit' name='submit' value='Submit'>";
-
-echo "</form>";
-
-/////////////////////////////////
-
-if ($_SERVER["REQUEST_METHOD"] == "GET") {
-   $movie = $_GET["movie"];
-}
-
-//using aid find actor info
-$movInfo = "SELECT title, year, rating, company FROM Movie WHERE id='" . $movie . "';";
-$mov_result = mysql_query($movInfo, $db_connection);
-print "<br> <h4>Movie Information: </h4>";
-
-
-while ($p_mov = mysql_fetch_assoc($mov_result)) {
-  foreach ($p_mov as $type => $row) {
-    if ($type == 'title') {
-      print "Title: ";
-    }
-    if ($type == 'year') {
-      print " (" . $row . ") <br>";
-      continue;
-    }
-    if ($type == 'rating') {
-      print "MPAA Rating: ";
-    }
-    if ($type == 'company') {
-      print "Producer: ";
-    }
-    if ($row == "") {
-      print "N/A";
-    }
-    else print $row;
-    if ($type != 'title') {
-      print "<br>";
-    } else print " ";
   }
-}
-
-//find mids using aid
-$find_aid = "SELECT aid FROM MovieActor WHERE mid='" . $movie . "';";
-$find_act = "SELECT id, first, last FROM Actor WHERE ";
-
-$aid_result = mysql_query($find_aid, $db_connection);
-if(empty($aid_result)){
-  print "No aids found. <br>";
-  exit(1);
-}
-// completing query
-mysql_data_seek($aid_result, 1);
-$num_rows = mysql_num_rows($aid_result);
-while($actor = mysql_fetch_assoc($aid_result)){
-  foreach($actor as $row){
-    $find_act .= "id='" . $row . "'";
-    $num_rows = $num_rows - 1;
-  }
-  if($num_rows > 1)
-    $find_act .= " OR ";
-}
-print "<br>";
-//print $find_titles . "<br>";
-
-// find actors and actresses
-$act_result = mysql_query($find_act, $db_connection);
-if (empty($act_result)) {
-  print "No actors or actresses found. <br>";
-  exit(1);
-}
-
-print "<h4>Actors and actresses in this movie: </h4>";
-
-while($actor_list = mysql_fetch_assoc($act_result)){
-  foreach($actor_list as $type => $row){
-    if ($type == 'id') {
-      print "<a href='./actorInfo.php?actor_list=" . $row . "&submit=Submit'>";
-      continue;
-    }
-    print $row;
-    if ($type == 'first') {
-      print " ";
-      continue;
-    } else print "</a><br>";
-  }
-}
-
-mysql_free_result($mov_result);
-mysql_free_result($movResult);
-mysql_free_result($dirResult);
-mysql_free_result($result);
-mysql_free_result($mid);
-mysql_free_result($did);
-mysql_close($db_connection);
+  mysql_select_db("TEST", $db_connection);
+  
+  $query = "SELECT title, id FROM Movie WHERE id = " . $movieid . ";";
+  $mov = mysql_query($query, $db_connection);  
+  if ($mov) {
+    $r = mysql_fetch_row($mov);
 ?>
 
-<form action="./comments.php?id=" method="GET">
+<form method="post">
+<p><h2>Review "<?php echo "<a href='./movies.php?id=$r[1]'><u>" .$r[0]. "</u></a>";?>"</h2><br/></p>
+<p>Your Name: <input type="text" name="name" maxlength="20"/><br /></p>
 <p>
-  <input type="hidden" name="id" value ="<?php echo $input; ?>"/>
-  <input type="submit" value="Add Review!" />
+  Rating:
+  <select name="rating">
+    <option value=5>5 (Excellent)</option>
+    <option value=4>4 (Good)</option>
+    <option value=3>3 (Okay)</option>
+    <option value=2>2 (Poor)</option>
+    <option value=1>1 (Terrible)</option>
+  </select>
 </p>
+<p>Comments: <br/>
+<textarea name="cmmt" cols="60" rows="8" maxlength="500" placeholder="Max length: 500 characters"></textarea></p>
+<p><input type="submit" value="Add Review"></p>
 </form>
 
 </div>
-<!--END MOVIE INFO-->
+<!--END ADD COMMENT-->
 
 </div>
-
 <!--END MIDSECTION-->
 
 <div class="col-md-3 sidebar"></div>
-
 <!--END CONTENT-->
 
 </body>
