@@ -190,14 +190,12 @@ if(!empty($nfmatches) || !empty($cfmatches))
 preg_match($numpattern, $lastName, $nlmatches);
 preg_match($cpattern, $lastName, $clmatches);
 
-if(!empty($nlmatches) || !empty($clmatches))
-{
+if(!empty($nlmatches) || !empty($clmatches)) {
 	print "Invalid expression for last name. Please try again.";
 	exit(1);
 }
 
-if($firstName == "" || $lastName == "")
-{
+if($firstName == "" || $lastName == "") {
 	print "You must provide a first and last name.";
 	exit(1);
 }
@@ -206,44 +204,43 @@ if($firstName == "" || $lastName == "")
 
 //check if that person is already in database using 
 //firstName, lastName, sex, and dob
-$query_check = "SELECT COUNT(*) FROM ".mysql_real_escape_string($position)." 
-WHERE last='".mysql_real_escape_string($lastName)."' AND
-first='".mysql_real_escape_string($firstName)."' AND
-dob='".mysql_real_escape_string($dob)."';";
+$query_check = "SELECT COUNT(*) FROM " . mysql_real_escape_string($position) . " 
+WHERE last='" . mysql_real_escape_string($lastName) . "' AND
+first='" . mysql_real_escape_string($firstName) . "' AND
+dob='" . mysql_real_escape_string($dob) . "';";
 
 $check_results = mysql_query($query_check, $db_connection);
 while($print_check = mysql_fetch_assoc($check_results)){
-foreach($print_check as $row)
-	if($row != 0)
-	{
-	 print "This person is already in our database.";
-	 exit(1);
-	}
+  foreach($print_check as $row) {
+    if($row != 0) {
+      print "This person is already in our database.";
+      exit(1);
+    }
+  }
 }
-
 
 mysql_free_result($check_results);
 
 $updateID = mysql_query("UPDATE MaxPersonID SET id=id+1", $db_connection);
 
-$query = "INSERT INTO ".mysql_real_escape_string($position)." 
-VALUES('".mysql_real_escape_string($updateID)."', 
-'".mysql_real_escape_string($firstName)."',
-'".mysql_real_escape_string($lastName)."',
-'".mysql_real_escape_string($sex)."',
-'".mysql_real_escape_string($dob)."',
-'".mysql_real_escape_string($dod)."');";
+$query = "INSERT INTO " . mysql_real_escape_string($position) . " 
+VALUES('" . mysql_real_escape_string($updateID) . "', 
+'" . mysql_real_escape_string($firstName) . "',
+'" . mysql_real_escape_string($lastName) . "',
+'" . mysql_real_escape_string($sex) . "',
+'" . mysql_real_escape_string($dob) . "',
+'" . mysql_real_escape_string($dod) . "');";
 
 $result = mysql_query($query, $db_connection);
 
 if ($_GET["submit"]) {
-   if (!$result) {
-   print "Insertion failed. <br>";
-   exit(1);
-   }
-   else {
-   print "You've successfully added <br />" . $firstName . " " . $lastName;
-   }
+  if (!$result) {
+    print "Insertion failed. <br>";
+    exit(1);
+  }
+  else {
+  print "You've successfully added <br />" . $firstName . " " . $lastName;
+  }
 }
 
 mysql_free_result($result);

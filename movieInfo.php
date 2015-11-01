@@ -195,13 +195,14 @@ while ($p_mov = mysql_fetch_assoc($mov_result)) {
 
 //find mids using aid
 $find_aid = "SELECT aid FROM MovieActor WHERE mid='" . $movie . "';";
-$find_act = "SELECT first, last FROM Actor WHERE ";
+$find_act = "SELECT id, first, last FROM Actor WHERE ";
 
 $aid_result = mysql_query($find_aid, $db_connection);
 if(empty($aid_result)){
   print "No aids found. <br>";
   exit(1);
 }
+// completing query
 mysql_data_seek($aid_result, 1);
 $num_rows = mysql_num_rows($aid_result);
 while($actor = mysql_fetch_assoc($aid_result)){
@@ -215,6 +216,7 @@ while($actor = mysql_fetch_assoc($aid_result)){
 print "<br>";
 //print $find_titles . "<br>";
 
+// find actors and actresses
 $act_result = mysql_query($find_act, $db_connection);
 if (empty($act_result)) {
   print "No actors or actresses found. <br>";
@@ -225,13 +227,16 @@ print "<h4>Actors and actresses in this movie: </h4>";
 
 while($actor_list = mysql_fetch_assoc($act_result)){
   foreach($actor_list as $type => $row){
-    if ($type == 'first') {
-      print $row . " ";
+    if ($type == 'id') {
+      print "<a href='./actorInfo.php?actor_list=" . $row . "&submit=Submit'>";
       continue;
     }
     print $row;
+    if ($type == 'first') {
+      print " ";
+      continue;
+    } else print "</a><br>";
   }
-  print "<br>";
 }
 
 mysql_free_result($mov_result);

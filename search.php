@@ -136,7 +136,7 @@ $search_list = explode(' ', $searchQuery);
 $actorQuery = 'SELECT id, first, last, dob FROM Actor WHERE 1 ';
 $dirQuery = 'SELECT id, first, last, dob FROM Director WHERE 1 ';
 $mQuery = 'SELECT id, title, year FROM Movie WHERE 1 AND Movie.title LIKE
-"%'. $searchQuery .'%"';
+"%' . $searchQuery . '%"';
 
 
 foreach($search_list as $single)
@@ -154,8 +154,8 @@ print "<h3>Actors/Actresses Search Results: <br></h3>";
 $a_result = mysql_query($actorQuery, $db_connection);
 while($p_actors = mysql_fetch_assoc($a_result)){
 	foreach($p_actors as $row){
-	print  $row . "\t";
-}
+    print  $row . "\t";
+  }
 	print '<br>';
 }
 
@@ -166,8 +166,8 @@ $d_result = mysql_query($dirQuery, $db_connection);
 mysql_data_seek($d_result, 1);
 while($p_dir = mysql_fetch_assoc($d_result)){
 	foreach($p_dir as $row){
-	print $row . "\t";
-}
+    print $row . "\t";
+  }
 	print '<br>';
 }
 print '<br>';
@@ -177,8 +177,8 @@ $m_result = mysql_query($mQuery, $db_connection);
 mysql_data_seek($m_result, 1);
 while($p_mov = mysql_fetch_assoc($m_result)){
 	foreach($p_mov as $row){
-	print $row . "\t";
-}
+    print $row . "\t";
+  }
 	print '<br>';
 }
 print '<br>';

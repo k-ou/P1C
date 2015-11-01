@@ -192,13 +192,14 @@ while ($p_act = mysql_fetch_assoc($a_result)) {
 //find mids using aid
 $find_mid = "SELECT mid FROM MovieActor WHERE aid='" . $aid . "';";
 
-$find_titles = "SELECT title, year FROM Movie WHERE ";
+$find_titles = "SELECT id, title, year FROM Movie WHERE ";
 
 $mid_result = mysql_query($find_mid, $db_connection);
 if(empty($mid_result)){
 	print "No mids found. <br>";
 	exit(1);
 }
+// complete query
 mysql_data_seek($mid_result, 1);
 $num_rows = mysql_num_rows($mid_result);
 while($mid = mysql_fetch_assoc($mid_result)){
@@ -212,6 +213,7 @@ while($mid = mysql_fetch_assoc($mid_result)){
 print "<br>";
 //print $find_titles . "<br>";
 
+// find titles
 $titles_result = mysql_query($find_titles, $db_connection);
 if (empty($titles_result)) {
   print "No movie titles found. <br>";
@@ -222,15 +224,20 @@ print "<h4>Movies acted in: </h4>";
 
 while($titles = mysql_fetch_assoc($titles_result)){
   foreach($titles as $type => $row){
-    if ($type == 'year') {
-      print " (" . $row . ")";
+    if ($type == 'id') {
+      print "<a href = './movieInfo.php?movie=" . $row . "&submit=Submit'>";
       continue;
+    } else if ($type == 'title') {
+      print $row . "</a>";
     }
-    print $row;
+    else if ($type == 'year') {
+      print " (" . $row . ")";
+    }
   }
 	print "<br>";
 }
 
+mysql_free_result($id_result);
 mysql_free_result($titles_result);
 mysql_free_result($mid_result);
 mysql_free_result($actResult);
