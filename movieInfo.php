@@ -162,12 +162,38 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
    $movie = $_GET["movie"];
 }
 
-//$mid = mysql_query("SELECT id FROM Movie WHERE Movie.title='$movie'", $db_connection);
-//$did = mysql_query("SELECT id FROM Director WHERE Director.id='$dirID'", $db_connection);
-//$query = "INSERT INTO MovieDirector VALUES ('$mid', '$did')";
-$query = "SELECT * FROM Movies WHERE id='$movie'";
-$result = mysql_query($query, $db_connection);
+//using aid find actor info
+$movInfo = "SELECT title, year, rating, company FROM Movie WHERE id='" . $movie . "';";
+$mov_result = mysql_query($movInfo, $db_connection);
+print "<br> <h4>Movie Information: </h4>";
 
+
+while ($p_mov = mysql_fetch_assoc($mov_result)) {
+  foreach ($p_mov as $type => $row) {
+    if ($type == 'title') {
+      print "Title: ";
+    }
+    if ($type == 'year') {
+      print " (" . $row . ") <br>";
+      continue;
+    }
+    if ($type == 'rating') {
+      print "MPAA Rating: ";
+    }
+    if ($type == 'company') {
+      print "Producer: ";
+    }
+    if ($row == "") {
+      print "N/A";
+    }
+    else print $row;
+    if ($type != 'title') {
+      print "<br>";
+    } else print " ";
+  }
+}
+
+mysql_free_result($mov_result);
 mysql_free_result($movResult);
 mysql_free_result($dirResult);
 mysql_free_result($result);

@@ -160,21 +160,37 @@ html, body {
 $aid = $_GET['actor_list'];
 
 //using aid find actor info
-$aInfo = "SELECT first, last, sex, dob, dod FROM Actor WHERE id='".$aid."';";
+$aInfo = "SELECT first, last, sex, dob, dod FROM Actor WHERE id='" . $aid . "';";
 $a_result = mysql_query($aInfo, $db_connection);
-print "Actor/Actress Information: <br>";
+print "<br> <h4>Actor/Actress Information: </h4>";
 
 
-while($p_act = mysql_fetch_assoc($a_result)){
-	foreach($p_act as $row){
-	print $row . "\t";
+while ($p_act = mysql_fetch_assoc($a_result)) {
+	foreach ($p_act as $type => $row) {
+    if ($type == 'first') {
+      print "Name: ";
+    }
+    if ($type == 'sex') {
+      print "Sex: ";
+    }
+    if ($type == 'dob') {
+      print "Date of birth: ";
+    }
+    if ($type == 'dod') {
+      print "Date of death: ";
+    }
+    if ($row == "") {
+      print "N/A";
+    }
+    else print $row . "\t";
+    if ($type != 'first') {
+      print "<br>";
+    }
+  }
 }
-}
-print '<br>';
 
 //find mids using aid
-$find_mid = "SELECT mid FROM MovieActor WHERE aid='".$aid."';";
-
+$find_mid = "SELECT mid FROM MovieActor WHERE aid='" . $aid . "';";
 
 $find_titles = "SELECT title, year FROM Movie WHERE ";
 
@@ -186,10 +202,10 @@ if(empty($mid_result)){
 mysql_data_seek($mid_result, 1);
 $num_rows = mysql_num_rows($mid_result);
 while($mid = mysql_fetch_assoc($mid_result)){
-	foreach($mid as $row){
-	$find_titles .= "id='".$row."'";
-	$num_rows = $num_rows - 1;
-}
+  foreach($mid as $row){
+    $find_titles .= "id='" . $row . "'";
+    $num_rows = $num_rows - 1;
+  }
 	if($num_rows > 1)
 		$find_titles .= " OR ";
 }
@@ -197,15 +213,25 @@ print "<br>";
 //print $find_titles . "<br>";
 
 $titles_result = mysql_query($find_titles, $db_connection);
-if(empty($titles_result)){
-	print "No movie titles found. <br>";
+if (empty($titles_result)) {
+  print "No movie titles found. <br>";
 	exit(1);
 }
 
+$find_mid = "SELECT mid, role FROM MovieActor WHERE aid='" . $aid . "';";
+
+$find_titles = "SELECT title, year FROM Movie WHERE ";
+
+print "<h4>Movies acted in: </h4>";
+
 while($titles = mysql_fetch_assoc($titles_result)){
-	foreach($titles as $row){
-	print $row . "\t";
-}
+  foreach($titles as $type => $row){
+    if ($type == 'year') {
+      print " (" . $row . ")";
+      continue;
+    }
+    print $row;
+  }
 	print "<br>";
 }
 
