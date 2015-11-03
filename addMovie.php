@@ -79,7 +79,7 @@ html, body {
           <li><a href="./addMovActRel.php">Add Movie/Actor Relation</a></li>
           <li><a href="./addMovDirRel.php">Add Movie/Director Relation</a></li>
           <li role="separator" class="divider"></li>
-          <li><a href="#">Separated link</a></li>
+          <li><a href="./comment.php">Add Movie Review</a></li>
         </ul>
       </li>
       <!--end ADD NEW dropdown-->
@@ -102,17 +102,6 @@ html, body {
       </form>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="./movieDBQuery.php">Enter Query</a></li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="#">Action</a></li>
-            <li><a href="#">Another action</a></li>
-            <li><a href="#">Something else here</a></li>
-            <li role="separator" class="divider"></li>
-            <li><a href="#">Separated link</a></li>
-          </ul>
-        </li>
-      </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
@@ -140,32 +129,32 @@ html, body {
   <input type="text" name="year"><br>
   MPAA Rating :
   <select name="mpaarating">
-    <option value="G">G</option>
-    <option value="PG">PG</option>
-    <option value="PG-13">PG-13</option>
-    <option value="NC-17">NC-17</option>
-    <option value="R">R</option>
-    <option value="surrendere">surrendere</option>
+    <option value="G" name="rating">G</option>
+    <option value="PG" name="rating">PG</option>
+    <option value="PG-13" name="rating">PG-13</option>
+    <option value="NC-17" name="rating">NC-17</option>
+    <option value="R" name="rating">R</option>
+    <option value="surrendere" name="rating">surrendere</option>
   </select><br/>
     Genre:<br>
-  <input type="checkbox" name="action"> Action<br>
-    <input type="checkbox" name="adult"> Adult<br>
-    <input type="checkbox" name="adventure"> Adventure<br>
-    <input type="checkbox" name="animation"> Animation<br>
-    <input type="checkbox" name="comedy"> Comedy<br>
-    <input type="checkbox" name="crime"> Crime<br>
-    <input type="checkbox" name="documentary"> Documentary<br>
-    <input type="checkbox" name="family"> Family<br>
-    <input type="checkbox" name="fantasy"> Fantasy<br>
-    <input type="checkbox" name="horror"> Horror<br>
-    <input type="checkbox" name="musical"> Musical<br>
-    <input type="checkbox" name="myster"> Mystery<br>
-    <input type="checkbox" name="romance"> Romance<br>
-    <input type="checkbox" name="sci-fi"> Sci-Fi<br>
-    <input type="checkbox" name="short"> Short<br>
-    <input type="checkbox" name="thriller"> Thriller<br>
-    <input type="checkbox" name="war"> War<br>
-    <input type="checkbox" name="western"> Western<br>
+  <input type="checkbox" name="genre[]" value="action"> Action<br>
+    <input type="checkbox" name="genre[]" value="adult"> Adult<br>
+    <input type="checkbox" name="genre[]" value="adventure"> Adventure<br>
+    <input type="checkbox" name="genre[]" value="animation"> Animation<br>
+    <input type="checkbox" name="genre[]" value="comedy"> Comedy<br>
+    <input type="checkbox" name="genre[]" value="crime"> Crime<br>
+    <input type="checkbox" name="genre[]" value="documentary"> Documentary<br>
+    <input type="checkbox" name="genre[]" value="family"> Family<br>
+    <input type="checkbox" name="genre[]" value="fantasy"> Fantasy<br>
+    <input type="checkbox" name="genre[]" value="horror"> Horror<br>
+    <input type="checkbox" name="genre[]" value="musical"> Musical<br>
+    <input type="checkbox" name="genre[]" value="myster"> Mystery<br>
+    <input type="checkbox" name="genre[]" value="romance"> Romance<br>
+    <input type="checkbox" name="genre[]" value="sci-fi"> Sci-Fi<br>
+    <input type="checkbox" name="genre[]" value="short"> Short<br>
+    <input type="checkbox" name="genre[]" value="thriller"> Thriller<br>
+    <input type="checkbox" name="genre[]" value="war"> War<br>
+    <input type="checkbox" name="genre[]" value=western"> Western<br>
   <br><br>
   <input type="submit" name="submit" value="Submit">
 </form>
@@ -177,7 +166,7 @@ if(!$db_connection){
 	print "Connection failed: $errmsg <br />";
 	exit(1);
 }
-mysql_select_db("TEST", $db_connection);
+mysql_select_db("CS143", $db_connection);
 
 // php only runs if submit button is pressed
 if (isset($_GET["submit"])){
@@ -189,20 +178,23 @@ $year = "";
 $rating = "";
 $company = "";
 $genre = "";
+$genres = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
    $title = $_GET["title"];
    $year = $_GET["year"];
-   $rating = $_GET["rating"];
+   $rating = $_GET["mpaarating"];
    $company = $_GET["company"];
-   $genre = $_GET["genre"];
+   $genre = $_GET["genre"];	
+   
 }
 
-/*if($year < 1900 || $year > 2015)
+
+if($year < 1900 || $year > 2015)
 {
   print "Invalid year. Please try again.";
   exit(1);
-}*/
+}
 
 $getUpdate = mysql_query("UPDATE MaxMovieID SET id=id+1", $db_connection);
 if(!$getUpdate){
@@ -233,6 +225,7 @@ $query = "INSERT INTO Movie VALUES ('".mysql_real_escape_string($updateID)."',
   '".mysql_real_escape_string($company)."');";
 
 $result = mysql_query($query, $db_connection);
+
 
 if ($_GET["submit"]){
 	if(!$result){
