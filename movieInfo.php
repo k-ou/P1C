@@ -79,7 +79,7 @@ html, body {
           <li><a href="./addMovActRel.php">Add Movie/Actor Relation</a></li>
           <li><a href="./addMovDirRel.php">Add Movie/Director Relation</a></li>
           <li role="separator" class="divider"></li>
-          <li><a href="#">Separated link</a></li>
+          <li><a href="./comment.php">Add Movie Review</a></li>
         </ul>
       </li>
       <!--end ADD NEW dropdown-->
@@ -249,12 +249,58 @@ while($actor_list = mysql_fetch_assoc($act_result)){
   }
 }
 
-print "<form action='./comment.php?id=" . $movie . "&submit=Submit' method='GET'>
+//get average rating
+$getavg = "SELECT AVG(rating) FROM Review WHERE mid=".$movie.";";
+$avg_result = mysql_query($getavg, $db_connection);
+if(!$avg_result)
+{
+	print "No ratings found; unable to fetch average rating.";
+	exit(1);
+}
+while($f_avg = mysql_fetch_assoc($avg_result))
+{
+	foreach($f_avg as $row)
+	{
+		$avg = $row;
+	}
+}
+print "<h4> Average Rating by Users: ".$avg."<br>";
+
+//display all reviews
+print "<h4> Reviews by Users: </h4><br>";
+$getReviews = "SELECT name, time, rating, comment FROM Review WHERE mid=".$movie.";";
+$r_result = mysql_query($getReviews, $db_connection);
+if(!$r_result)
+{
+	print "Unable to fetch comments.";
+	exit(1);
+}
+
+print '<table border="1"><tr>';
+$comments = mysql_fetch_assoc($r_result);
+foreach(array_keys($comments) as $col){
+	print '<td>' . $col . '</td>';
+}
+print '</tr>';
+
+mysql_data_seek($r_result, 0);
+while($comments = mysql_fetch_assoc($r_result)){
+	print '<tr>';
+	foreach($comments as $row){
+	print '<td>' . $row . '</td>';
+	}
+	print '</tr>';
+}
+print '</table>';
+
+print "<form action='./comment.php' method='GET'>
 <p>
   <input type='submit' value='Add Review!'>
 </p>
 </form>";
 
+
+mysql_free_result($r_result);
 mysql_free_result($mov_result);
 mysql_free_result($movResult);
 mysql_free_result($dirResult);

@@ -136,12 +136,13 @@ if (!$db_connection) {
 }
 mysql_select_db("TEST", $db_connection);
 
-//print "<form action='" . $_SERVER['PHP_SELF'] . "' method='get' id='commentForm'>";
-print "<p><h4>Review</h4><br>";
+
+print "<p><h1>Review</h1><br>";
 print "Movie: <br>";
 $mquery = "SELECT title, id FROM Movie;";
 $mResult = mysql_query($mquery);
-echo "<form action='". $_SERVER['PHP_SELF'] . "' method='get' name='movieList'>";
+
+echo "<form action='". $_SERVER['PHP_SELF'] . "' method='get' id='movieList'>";
 echo "<select form='movieList' name='movie'>";
 echo "<option value=''>Select Movie</option>";
 if(!$mResult){
@@ -168,14 +169,58 @@ print "
   Comments: <br>
   <textarea name='comment' cols='50' rows='6' maxlength='500' 
   placeholder='Max length: 500 characters'></textarea><br>
-  <input type='submit' name = 'submit' value='Add Review'>
+  <input type='submit' name='submit' value='Add Review'>
 </p>
 </form>";
 
+
+////////////////////////////////////////////////
+
+if(isset($_GET["submit"])){
+$mid = "";
+$name = "";
+$rating = "";
+$comment = "";
+
+//$time = date("Y-m-d H:i:s");
+
+if($_SERVER["REQUEST_METHOD"] == "GET"){
+	$mid = $_GET["movie"];
+	$name = $_GET["name"];
+	$rating = $_GET["rating"];
+	$comment = $_GET["comment"];
+}
+
+if(empty($name)){
+	print "You must enter a name.";
+	exit(1);
+}
+
+$query = "INSERT INTO Review VALUES('".mysql_real_escape_string($name)."',
+'".mysql_real_escape_string($time)."',
+'".mysql_real_escape_string($mid)."',
+'".$rating."',
+'".mysql_real_escape_string($comment)."');";
+
+$result = mysql_query($query, $db_connection);
+
+if(!$result)
+{
+	print "Could not insert comment.";
+	exit(1);
+}
+else{
+	print "You've successfully added a comment.";
+}
+
+
+
+}
+
+mysql_free_result($result);
 mysql_free_result($mResult);
 mysql_close($db_connection);
 ?>
-
 </div>
 <!--END ADD COMMENT-->
 
