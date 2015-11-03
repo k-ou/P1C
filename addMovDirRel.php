@@ -189,7 +189,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
 }
 
 //using aid find actor info
-$addMovDir = "INSERT INTO MovieActor VALUES ('" . $mid . "', '" . $did . "');";
+$addMovDir = "INSERT INTO MovieDirector VALUES ('" . $mid . "', '" . $did . "');";
 $result = mysql_query($addMovDir, $db_connection);
 
 if ($_GET["submit"]) {

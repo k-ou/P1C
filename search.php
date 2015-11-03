@@ -183,8 +183,8 @@ if (isset($_GET["search"])) {
 
   print "<h3>Director Search Results: <br></h3>";
   $d_result = mysql_query($dirQuery, $db_connection);
-  if (sizeof($d_result) == 1)
-    print "No movies found.";
+  if (sizeof($d_result) == 0)
+    print "No directors found.";
   mysql_data_seek($d_result, 1);
   while($p_dir = mysql_fetch_assoc($d_result)){
     foreach($p_dir as $row){

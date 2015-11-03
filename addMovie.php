@@ -167,7 +167,7 @@ html, body {
     <input type="checkbox" name="war"> War<br>
     <input type="checkbox" name="western"> Western<br>
   <br><br>
-  <input type="submit" value="Submit">
+  <input type="submit" name="submit" value="Submit">
 </form>
 
 <?php
@@ -180,7 +180,8 @@ if(!$db_connection){
 mysql_select_db("TEST", $db_connection);
 
 // php only runs if submit button is pressed
-if (isset($_GET["submit"])) {
+if (isset($_GET["submit"])){
+
 
 $id = "";
 $title = "";
@@ -197,13 +198,34 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
    $genre = $_GET["genre"];
 }
 
-if($year < 1900 || $year > 2015)
+/*if($year < 1900 || $year > 2015)
 {
   print "Invalid year. Please try again.";
   exit(1);
+}*/
+
+$getUpdate = mysql_query("UPDATE MaxMovieID SET id=id+1", $db_connection);
+if(!$getUpdate){
+	print "Update failed.";
+	exit(1);
+}
+$getNewID = mysql_query("SELECT id FROM MaxMovieID", $db_connection);
+if(!$getNewID){
+	print "Insertion failed.";
+	exit(1);
 }
 
-$updateID = mysql_query("UPDATE MaxMovieID SET id=id+1", $db_connection);
+while($id = mysql_fetch_assoc($getNewID)){
+	foreach($id as $row)
+	{ $updateID = $row;
+}
+}
+mysql_free_result($getUpdate);
+
+
+print "updateID: " . $updateID . "<br>";
+
+
 $query = "INSERT INTO Movie VALUES ('".mysql_real_escape_string($updateID)."',
   '".mysql_real_escape_string($title)."',
   '".mysql_real_escape_string($year)."',
@@ -212,16 +234,19 @@ $query = "INSERT INTO Movie VALUES ('".mysql_real_escape_string($updateID)."',
 
 $result = mysql_query($query, $db_connection);
 
-if (!$result) {
-    print "Insertion failed. <br>";
-    exit(1);
+if ($_GET["submit"]){
+	if(!$result){
+	print "Insertion failed. <br>";
+	exit(1);
 }
-else {
-   print "You've successfully added <br />" . $title;
+	else{
+	print "You've successfully added <br />" . $title;
+}
 }
 
-mysql_free_result($result);
 }
+mysql_free_result($result);
+
 mysql_close($db_connection);
 
 ?>
