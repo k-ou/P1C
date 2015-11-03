@@ -58,7 +58,6 @@ CREATE TABLE Review(
        mid INT NOT NULL,
        rating INT NOT NULL,
        comment VARCHAR(500),
-       UNIQUE(name, mid),
        FOREIGN KEY (mid) references Movie(id),
 	/* Review must reference a valid Movie (id) entry. */
        CHECK(rating >= 0 AND rating < 6)
