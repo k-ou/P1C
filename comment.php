@@ -78,7 +78,7 @@ height: 100%;
           <li><a href="./addMovActRel.php">Add Movie/Actor Relation</a></li>
           <li><a href="./addMovDirRel.php">Add Movie/Director Relation</a></li>
           <li role="separator" class="divider"></li>
-          <li><a href="#">Separated link</a></li>
+          <li><a href="./comment.php">Add Movie Review</a></li>
         </ul>
       </li>
       <!--end ADD NEW dropdown-->
@@ -136,22 +136,27 @@ if (!$db_connection) {
 }
 mysql_select_db("TEST", $db_connection);
 
-print "<form action='" . $_SERVER['PHP_SELF'] . "' method='get' id='commentForm'>";
+//print "<form action='" . $_SERVER['PHP_SELF'] . "' method='get' id='commentForm'>";
+print "<p><h4>Review</h4><br>";
+print "Movie: <br>";
+$mquery = "SELECT title, id FROM Movie;";
+$mResult = mysql_query($mquery);
+echo "<form action='". $_SERVER['PHP_SELF'] . "' method='get' name='movieList'>";
+echo "<select form='movieList' name='movie'>";
+echo "<option value=''>Select Movie</option>";
+if(!$mResult){
+	print "Query for movies failed.";
+	exit(1);
+}
+while($row = mysql_fetch_array($mResult)){
+	print "<option value='".$row['id'] . "'>" . $row['title']. "</option>";
 
-print "Movie Review:<br>";
-print $id;
-$query = "SELECT id, title FROM Movie WHERE id = " . $movie . ";";
-$movResult = mysql_query($query, $db_connection);
-if (!$movResult) {
-  print "Addition failed. <br>";
-  exit(1);
 }
-print "<p><h4>Review ";
-while ($row = mysql_fetch_array($movResult)) {
-  print "<a href='./movies.php?id=" . $row['id'] . "'>" . $row['title'] . "</a>";
-}
-print "</h4><br>
-  Your Name: <input type='text' name='name' maxlength='20'><br>
+
+echo "</select>";
+echo "<br><br>";
+print "
+  Your Name: <input type='text' name='name' maxlength='20'><br><br>
   Rating:
   <select name='rating'>
     <option value=5>5 (Excellent)</option>
@@ -159,14 +164,15 @@ print "</h4><br>
     <option value=3>3 (Okay)</option>
     <option value=2>2 (Poor)</option>
     <option value=1>1 (Terrible)</option>
-  </select>
+  </select><br><br>
   Comments: <br>
   <textarea name='comment' cols='50' rows='6' maxlength='500' 
-  placeholder='Max length: 500 characters'></textarea>
+  placeholder='Max length: 500 characters'></textarea><br>
   <input type='submit' name = 'submit' value='Add Review'>
 </p>
 </form>";
 
+mysql_free_result($mResult);
 mysql_close($db_connection);
 ?>
 
