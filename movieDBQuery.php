@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 
@@ -10,19 +11,29 @@ html, body {
 
 .sidebar {
   background-color: #C1C1C1;
-  height: 100%;
+  height: auto;
 }
 
-.tab-content {
-  height:100%;
+.midsection {
+  height: auto;
   -webkit-box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
   -moz-box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
   box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
-  padding-top: -50px;
+  padding-top: 50px;
+  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 }
 
-.movieDBQuery {
-  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+.tab-content {
+  padding-top: 10px;
+  padding-bottom: 150px;
+  padding-left: 35px;
+  padding-right: 35px;
+}
+
+.footer {
+  padding-top: 50px;
+  padding-bottom: 50px;
+  text-align: center;
 }
 
 </style>
@@ -42,7 +53,7 @@ html, body {
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
-<nav class="navbar navbar-inverse">
+<nav class="navbar navbar-inverse navbar-fixed-top">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
@@ -83,9 +94,9 @@ html, body {
   <!--end dropdown-->
       </ul>
       <!--IMPLEMENT SEARCH-->
-      <form class="navbar-form navbar-left" role="search">
+      <form action="./search.php" class="navbar-form navbar-left" role="search">
         <div class="form-group">
-          <input type="text" class="form-control" placeholder="Search">
+          <input type="text"  name="search" class="form-control" placeholder="Search">
         </div>
         <button type="submit" class="btn btn-default">Submit</button>
       </form>
@@ -112,11 +123,11 @@ html, body {
 
 <!--MIDSECTION-->
 
-<div class="col-md-6 tab-content">
+<div class="col-md-6 midsection">
 
 <!--MOVIE DB-->
 
-<div class="movieDBQuery">
+<div class="movieDBQuery tab-content">
 
   <h1>Movie Database Query</h1>
   <p>(Ver 1.0 10/26/2015 by Sharon Grewal and Kelly Ou)<br>
@@ -183,12 +194,18 @@ mysql_close($db_connection);
 </div>
 <!--END MOVIEDB-->
 
-</div>
+<hr>
 
+<!--FOOTER-->
+<div class="footer">
+  <p>(Ver 1.0 10/26/2015 by Sharon Grewal and Kelly Ou)<br></p>
+</div>
+<!--END FOOTER-->
+
+</div>
 <!--END MIDSECTION-->
 
 <div class="col-md-3 sidebar"></div>
-
 <!--END CONTENT-->
 
 </body>

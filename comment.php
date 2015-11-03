@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 
@@ -6,12 +5,12 @@
 <style>
 
 html, body {
-  height: 100%;
+height: 100%;
 }
 
 .sidebar {
-  background-color: #C1C1C1;
-  height: auto;
+background-color: #C1C1C1;
+height: 100%;
 }
 
 .midsection {
@@ -53,7 +52,7 @@ html, body {
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
-<nav class="navbar navbar-inverse navbar-fixed-top">
+<nav class="navbar navbar-inverse">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
@@ -94,9 +93,9 @@ html, body {
   <!--end dropdown-->
       </ul>
       <!--IMPLEMENT SEARCH-->
-      <form action="./search.php" class="navbar-form navbar-left" role="search">
+      <form class="navbar-form navbar-left" role="search">
         <div class="form-group">
-          <input type="text"  name="search" class="form-control" placeholder="Search">
+          <input type="text" class="form-control" placeholder="Search">
         </div>
         <button type="submit" class="btn btn-default">Submit</button>
       </form>
@@ -123,148 +122,56 @@ html, body {
 
 <!--MIDSECTION-->
 
-<div class="col-md-6 midsection">
+<div class="col-md-6 tab-content">
 
-<!--ADD ACTOR / DIR-->
-<div class="addActorDir tab-content">
+<!--ADD COMMENT-->
+<div class="addComment">
 
-  <h1>Add Actor / Director</h1>
-  <p>(Ver 1.0 10/26/2015 by Sharon Grewal and Kelly Ou)<br>
-  Add an actor/actress or a director.</p>
-
-<form action="<?php $_SERVER['PHP_SELF'];?>" method="get">
-  <input type="radio" name="position" value="Actor" checked> Actor/Actress
-  <input type="radio" name="position" value="Director"> Director
-  <br>
-  First name:<br>
-  <input type="text" name="firstName">
-  <br>
-  Last name:<br>
-  <input type="text" name="lastName">
-  <br>
-  Sex:
-  <input type="radio" name="sex" value="female" checked> Female
-  <input type="radio" name="sex" value="male"> Male
-  <br>
-  Date of Birth (yyyy-mm-dd):<br>
-  <input type="text" name="dob">
-  <br>
-  Date of Death (yyyy-mm-dd or leave blank):<br>
-  <input type="text" name="dod">
-  <br><br>
-  <input type="submit" name="submit" value="Submit">
-</form>
-
-<?php
-
+<?php 
 $db_connection = mysql_connect("localhost", "cs143", "");
-if(!$db_connection){
-   $errmsg = mysql_error($db_connection);
-   print "Connection failed: $errmsg <br />";
-   exit(1);
+if (!$db_connection) {
+  $errmsg = mysql_error($db_connection);
+  print "Connection failed: $errmsg <br />";
+  exit(1);
 }
 mysql_select_db("TEST", $db_connection);
 
-// php only runs if submit button is pressed
-if (isset($_GET["submit"])) {
+print "<form action='" . $_SERVER['PHP_SELF'] . "' method='get' id='commentForm'>";
 
-  $position = "";
-  $firstName = "";
-  $lastName = "";
-  $sex = "";
-  $dob = "";
-  $dod = "";
-
-  if ($_SERVER["REQUEST_METHOD"] == "GET") {
-    $position = $_GET["position"];
-    $firstName = $_GET["firstName"];
-    $lastName = $_GET["lastName"];
-    $sex = $_GET["sex"];
-    $dob = $_GET["dob"];
-    $dod = $_GET["dod"]; 
-  }
-
-  print "position: " . $position . "<br>firstName: " . $firstName;
-  print "<br>lastName: " . $lastName . "<br>sex: " . $sex;
-  print "<br>dob: " . $dob . "<br>dod: " . $dod;
-  print "<br>";
-  //check that firstName + lastName contain only letters + ' + -
-  //check dob and dod are correct format yyyy-mm-dd
-
-  $numpattern = '([0-9]+)';
-  $cpattern = '([?_<>,~$%#@]+)';
-
-  preg_match($numpattern, $firstName, $nfmatches);
-  preg_match($cpattern, $firstName, $cfmatches);
-  if (!empty($nfmatches) || !empty($cfmatches)) {
-    print "Invalid expression for first name. Please try again.";
-    exit(1);
-  }
-  preg_match($numpattern, $lastName, $nlmatches);
-  preg_match($cpattern, $lastName, $clmatches);
-  if (!empty($nlmatches) || !empty($clmatches)) {
-    print "Invalid expression for last name. Please try again.";
-    exit(1);
-  }
-
-  if($firstName == "" || $lastName == "") {
-    print "You must provide a first and last name.";
-    exit(1);
-  }
-
-  //check if dod > dob if dod != NULL
-
-  //check if that person is already in database using 
-  //firstName, lastName, sex, and dob
-  $query_check = "SELECT COUNT(*) FROM " . mysql_real_escape_string($position) . " 
-  WHERE last='" . mysql_real_escape_string($lastName) . "' AND
-  first='" . mysql_real_escape_string($firstName) . "' AND
-  dob='" . mysql_real_escape_string($dob) . "';";
-
-  $check_results = mysql_query($query_check, $db_connection);
-  while($print_check = mysql_fetch_assoc($check_results)){
-    foreach($print_check as $row) {
-      if($row != 0) {
-        print "This person is already in our database.";
-        exit(1);
-      }
-    }
-  }
-
-  mysql_free_result($check_results);
-
-  $updateID = mysql_query("UPDATE MaxPersonID SET id=id+1", $db_connection);
-
-  $query = "INSERT INTO " . mysql_real_escape_string($position) . " 
-  VALUES('" . mysql_real_escape_string($updateID) . "', 
-  '" . mysql_real_escape_string($firstName) . "',
-  '" . mysql_real_escape_string($lastName) . "',
-  '" . mysql_real_escape_string($sex) . "',
-  '" . mysql_real_escape_string($dob) . "',
-  '" . mysql_real_escape_string($dod) . "');";
-
-  $result = mysql_query($query, $db_connection);
-
-  if ($_GET["submit"]) {
-    if (!$result) {
-      print "Insertion failed. <br>";
-      exit(1);
-    }
-    else {
-    print "You've successfully added <br />" . $firstName . " " . $lastName;
-    }
-  }
-
-  mysql_free_result($result);
+print "Movie Review:<br>";
+print $id;
+$query = "SELECT id, title FROM Movie WHERE id = " . $movie . ";";
+$movResult = mysql_query($query, $db_connection);
+if (!$movResult) {
+  print "Addition failed. <br>";
+  exit(1);
 }
-mysql_close($db_connection);
+print "<p><h4>Review ";
+while ($row = mysql_fetch_array($movResult)) {
+  print "<a href='./movies.php?id=" . $row['id'] . "'>" . $row['title'] . "</a>";
+}
+print "</h4><br>
+  Your Name: <input type='text' name='name' maxlength='20'><br>
+  Rating:
+  <select name='rating'>
+    <option value=5>5 (Excellent)</option>
+    <option value=4>4 (Good)</option>
+    <option value=3>3 (Okay)</option>
+    <option value=2>2 (Poor)</option>
+    <option value=1>1 (Terrible)</option>
+  </select>
+  Comments: <br>
+  <textarea name='comment' cols='50' rows='6' maxlength='500' 
+  placeholder='Max length: 500 characters'></textarea>
+  <input type='submit' name = 'submit' value='Add Review'>
+</p>
+</form>";
 
+mysql_close($db_connection);
 ?>
 
 </div>
-<!--END ADD ACTOR / DIR-->
-
-<hr>
+<!--END ADD COMMENT-->
 
 <!--FOOTER-->
 <div class="footer">

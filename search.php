@@ -11,19 +11,29 @@ html, body {
 
 .sidebar {
   background-color: #C1C1C1;
-  height: 100%;
+  height: auto;
 }
 
-.tab-content {
-  height:100%;
+.midsection {
+  height: auto;
   -webkit-box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
   -moz-box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
   box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
-  padding-top: -50px;
+  padding-top: 50px;
+  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 }
 
-.actorInfo {
-  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+.tab-content {
+  padding-top: 10px;
+  padding-bottom: 150px;
+  padding-left: 35px;
+  padding-right: 35px;
+}
+
+.footer {
+  padding-top: 50px;
+  padding-bottom: 50px;
+  text-align: center;
 }
 
 </style>
@@ -43,7 +53,7 @@ html, body {
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
-<nav class="navbar navbar-inverse">
+<nav class="navbar navbar-inverse navbar-fixed-top">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
@@ -84,7 +94,7 @@ html, body {
   <!--end dropdown-->
       </ul>
       <!--IMPLEMENT SEARCH-->
-      <form class="navbar-form navbar-left" role="search">
+      <form action="./search.php" class="navbar-form navbar-left" role="search">
         <div class="form-group">
           <input type="text"  name="search" class="form-control" placeholder="Search">
         </div>
@@ -112,92 +122,116 @@ html, body {
 <div class="col-md-3 sidebar"></div>
 
 <!--MIDSECTION-->
-<div class="col-md-6 tab-content">
+
+<div class="col-md-6 midsection">
+
+  <div class="search-page tab-content">
 
   <h1>Search Results</h1>
   <p>(Ver 1.0 10/26/2015 by Sharon Grewal and Kelly Ou)<br>
   Results get listed here.</p>
 
-  <?php
+<?php
 
-if(isset($_GET["search"])){
-$db_connection = mysql_connect("localhost", "cs143", "");
-   if(!$db_connection){
-   $errmsg = mysql_error($db_connection);
-   print "Connection failed: $errmsg <br />";
-   exit(1);
-}
-mysql_select_db("TEST", $db_connection);
-$searchQuery= $_GET["search"];
+if (isset($_GET["search"])) {
+  $db_connection = mysql_connect("localhost", "cs143", "");
+  if (!$db_connection) {
+    $errmsg = mysql_error($db_connection);
+    print "Connection failed: $errmsg <br />";
+    exit(1);
+  }
+  mysql_select_db("TEST", $db_connection);
+  $searchQuery= $_GET["search"];
+  if ($searchQuery == "") {
+    print "Please enter a search query.";
+    print "<div class='footer'>
+        <p>(Ver 1.0 10/26/2015 by Sharon Grewal and Kelly Ou)<br></p>
+        </div>";
+    exit(1);
+  }
 
 
-$search_list = explode(' ', $searchQuery);
+  $search_list = explode(' ', $searchQuery);
 
-$actorQuery = 'SELECT id, first, last, dob FROM Actor WHERE 1 ';
-$dirQuery = 'SELECT id, first, last, dob FROM Director WHERE 1 ';
-$mQuery = 'SELECT id, title, year FROM Movie WHERE 1 AND Movie.title LIKE
-"%'. $searchQuery .'%"';
+  $actorQuery = 'SELECT id, first, last, dob FROM Actor WHERE 1 ';
+  $dirQuery = 'SELECT id, first, last, dob FROM Director WHERE 1 ';
+  $mQuery = 'SELECT id, title, year FROM Movie WHERE 1 AND Movie.title LIKE
+  "%' . $searchQuery . '%"';
 
 
-foreach($search_list as $single)
-{
-	$actorQuery .= ' AND (Actor.first LIKE "%'. $single .'%" OR Actor.last 
-LIKE "%'. $single .'%")';
+  foreach($search_list as $single)
+  {
+    $actorQuery .= ' AND (Actor.first LIKE "%'. $single .'%" OR Actor.last 
+    LIKE "%'. $single .'%")';
 
-	$dirQuery .= ' AND (Director.first LIKE "%'. $single . '%" 
-OR Director.last LIKE "%' . $single . '%")';
+    $dirQuery .= ' AND (Director.first LIKE "%'. $single . '%" 
+    OR Director.last LIKE "%' . $single . '%")';
 	
-}
+  }
 
-print "<h3>Actors/Actresses Search Results: <br></h3>";
+  print "<h3>Actors/Actresses Search Results: <br></h3>";
+  $a_result = mysql_query($actorQuery, $db_connection);
+  if (sizeof($a_result) == 0)
+    print "No actors or actresses found.";
+  while($p_actors = mysql_fetch_assoc($a_result)){
+    foreach($p_actors as $row){
+      print  $row . "\t";
+    }
+    print '<br>';
+  }
+  print '<br>';
 
-$a_result = mysql_query($actorQuery, $db_connection);
-while($p_actors = mysql_fetch_assoc($a_result)){
-	foreach($p_actors as $row){
-	print  $row . "\t";
-}
-	print '<br>';
-}
+  print "<h3>Director Search Results: <br></h3>";
+  $d_result = mysql_query($dirQuery, $db_connection);
+  if (sizeof($d_result) == 1)
+    print "No movies found.";
+  mysql_data_seek($d_result, 1);
+  while($p_dir = mysql_fetch_assoc($d_result)){
+    foreach($p_dir as $row){
+      print $row . "\t";
+    }
+    print '<br>';
+  }
+  print '<br>';
 
-print '<br>';
-
-print "<h3>Director Search Results: <br></h3>";
-$d_result = mysql_query($dirQuery, $db_connection);
-mysql_data_seek($d_result, 1);
-while($p_dir = mysql_fetch_assoc($d_result)){
-	foreach($p_dir as $row){
-	print $row . "\t";
-}
-	print '<br>';
-}
-print '<br>';
-
-print "<h3>Movie Search Results: <br></h3>";
-$m_result = mysql_query($mQuery, $db_connection);
-mysql_data_seek($m_result, 1);
-while($p_mov = mysql_fetch_assoc($m_result)){
-	foreach($p_mov as $row){
-	print $row . "\t";
-}
-	print '<br>';
-}
-print '<br>';
+  print "<h3>Movie Search Results: <br></h3>";
+  $m_result = mysql_query($mQuery, $db_connection);
+  if (sizeof($m_result) == 0)
+    print "No movies found.";
+  mysql_data_seek($m_result, 1);
+  while($p_mov = mysql_fetch_assoc($m_result)){
+    foreach($p_mov as $row){
+      print $row . "\t";
+    }
+    print '<br>';
+  }
+  print '<br>';
 
 
-if ($_GET["submit"] && !sizeof($result)) {
-   print "No answer found.";
-}
+  if ($_GET["submit"] && !sizeof($result)) {
+    print "No answer found.";
+  }
 
-mysql_free_result($result);
-mysql_close($db_connection);
+  mysql_free_result($result);
+  mysql_close($db_connection);
 }
 ?>
+
+</div>
+<!--END SEARCH PAGE-->
+
+<hr>
+
+<!--FOOTER-->
+<div class="footer">
+  <p>(Ver 1.0 10/26/2015 by Sharon Grewal and Kelly Ou)<br></p>
+</div>
+<!--END FOOTER-->
 
 </div>
 <!--END MIDSECTION-->
 
 <div class="col-md-3 sidebar"></div>
-
 <!--END CONTENT-->
 
 </body>

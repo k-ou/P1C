@@ -6,24 +6,34 @@
 <style>
 
 html, body {
-height: 100%;
+  height: 100%;
 }
 
 .sidebar {
-background-color: #C1C1C1;
-height: 100%;
+  background-color: #C1C1C1;
+  height: auto;
+}
+
+.midsection {
+  height: auto;
+  -webkit-box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
+  -moz-box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
+  box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
+  padding-top: 50px;
+  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 }
 
 .tab-content {
-height:100%;
--webkit-box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
--moz-box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
-box-shadow: 0px 0px 49px 2px rgba(0,0,0,0.75);
-padding-top: -50px;
+  padding-top: 10px;
+  padding-bottom: 150px;
+  padding-left: 35px;
+  padding-right: 35px;
 }
 
-.movieInfo {
-  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+.footer {
+  padding-top: 50px;
+  padding-bottom: 50px;
+  text-align: center;
 }
 
 </style>
@@ -43,7 +53,7 @@ padding-top: -50px;
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
-<nav class="navbar navbar-inverse">
+<nav class="navbar navbar-inverse navbar-fixed-top">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
@@ -84,9 +94,9 @@ padding-top: -50px;
   <!--end dropdown-->
       </ul>
       <!--IMPLEMENT SEARCH-->
-      <form class="navbar-form navbar-left" role="search">
+      <form action="./search.php" class="navbar-form navbar-left" role="search">
         <div class="form-group">
-          <input type="text" class="form-control" placeholder="Search">
+          <input type="text"  name="search" class="form-control" placeholder="Search">
         </div>
         <button type="submit" class="btn btn-default">Submit</button>
       </form>
@@ -108,22 +118,20 @@ padding-top: -50px;
 </nav>
 
 <!--CONTENT-->
-
 <div class="col-md-3 sidebar"></div>
 
 <!--MIDSECTION-->
-
-<div class="col-md-6 tab-content">
+<div class="col-md-6 midsection">
 
 <!--START MOVIE INFO-->
-<div class="movieInfo">
+<div class="movieInfo tab-content">
 
   <h1>Movie Info</h1>
   <p>(Ver 1.0 10/26/2015 by Sharon Grewal and Kelly Ou)<br>
   Select a movie from the list below to show participating actors and/or actresses,
   average score based on user ratings, and user comments.</p>
 
-  <?php 
+<?php 
 $db_connection = mysql_connect("localhost", "cs143", "");
 if(!$db_connection){
    $errmsg = mysql_error($db_connection);
@@ -160,32 +168,120 @@ echo "</form>";
 
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
    $movie = $_GET["movie"];
-   $dirID = $_GET["dirID"];
 }
 
-//$mid = mysql_query("SELECT id FROM Movie WHERE Movie.title='$movie'", $db_connection);
-//$did = mysql_query("SELECT id FROM Director WHERE Director.id='$dirID'", $db_connection);
-//$query = "INSERT INTO MovieDirector VALUES ('$mid', '$did')";
-$query = "INSERT INTO MovieDirector VALUES ('$movie', '$dirID')";
-$result = mysql_query($query, $db_connection);
+// php only runs if submit button is pressed
+if (isset($_GET["submit"])) {
 
+//using aid find actor info
+$movInfo = "SELECT title, year, rating, company FROM Movie WHERE id='" . $movie . "';";
+$mov_result = mysql_query($movInfo, $db_connection);
+print "<br> <h4>Movie Information: </h4>";
+
+
+while ($p_mov = mysql_fetch_assoc($mov_result)) {
+  foreach ($p_mov as $type => $row) {
+    if ($type == 'title') {
+      print "Title: ";
+    }
+    if ($type == 'year') {
+      print " (" . $row . ") <br>";
+      continue;
+    }
+    if ($type == 'rating') {
+      print "MPAA Rating: ";
+    }
+    if ($type == 'company') {
+      print "Producer: ";
+    }
+    if ($row == "") {
+      print "N/A";
+    }
+    else print $row;
+    if ($type != 'title') {
+      print "<br>";
+    } else print " ";
+  }
+}
+
+//find mids using aid
+$find_aid = "SELECT aid FROM MovieActor WHERE mid='" . $movie . "';";
+$find_act = "SELECT id, first, last FROM Actor WHERE ";
+
+$aid_result = mysql_query($find_aid, $db_connection);
+if(empty($aid_result)){
+  print "No aids found. <br>";
+  exit(1);
+}
+// completing query
+mysql_data_seek($aid_result, 1);
+$num_rows = mysql_num_rows($aid_result);
+while($actor = mysql_fetch_assoc($aid_result)){
+  foreach($actor as $row){
+    $find_act .= "id='" . $row . "'";
+    $num_rows = $num_rows - 1;
+  }
+  if($num_rows > 1)
+    $find_act .= " OR ";
+}
+print "<br>";
+//print $find_titles . "<br>";
+
+// find actors and actresses
+$act_result = mysql_query($find_act, $db_connection);
+if (empty($act_result)) {
+  print "No actors or actresses found. <br>";
+}
+
+print "<h4>Actors and actresses in this movie: </h4>";
+
+while($actor_list = mysql_fetch_assoc($act_result)){
+  foreach($actor_list as $type => $row){
+    if ($type == 'id') {
+      print "<a href='./actorInfo.php?actor_list=" . $row . "&submit=Submit'>";
+      continue;
+    }
+    print $row;
+    if ($type == 'first') {
+      print " ";
+      continue;
+    } else print "</a><br>";
+  }
+}
+
+print "<form action='./comment.php?id=" . $movie . "&submit=Submit' method='GET'>
+<p>
+  <input type='submit' value='Add Review!'>
+</p>
+</form>";
+
+mysql_free_result($mov_result);
 mysql_free_result($movResult);
 mysql_free_result($dirResult);
 mysql_free_result($result);
 mysql_free_result($mid);
 mysql_free_result($did);
+}
 mysql_close($db_connection);
 ?>
+
+<br><br>
 
 </div>
 <!--END MOVIE INFO-->
 
-</div>
+<hr>
 
+<!--FOOTER-->
+<div class="footer">
+  <p>(Ver 1.0 10/26/2015 by Sharon Grewal and Kelly Ou)<br></p>
+</div>
+<!--END FOOTER-->
+
+</div>
 <!--END MIDSECTION-->
 
 <div class="col-md-3 sidebar"></div>
-
 <!--END CONTENT-->
 
 </body>
