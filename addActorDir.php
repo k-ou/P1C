@@ -233,12 +233,32 @@ if (isset($_GET["submit"])) {
 
   mysql_free_result($check_results);
 
-  $updateID = mysql_query("UPDATE MaxPersonID SET id=id+1", $db_connection);
+  $getUpdate = mysql_query("UPDATE MaxPersonID SET id=id+1", $db_connection);
+  
+  if(!$getUpdate){
+	print "Insertion failed.";
+	exit(1);
+}
+  $getNewID = mysql_query("SELECT id FROM MaxPersonID", $db_connection);
+  if(!$getNewID){
+	print "Insertion failed.";
+	exit(1);
+}
+
+while($id = mysql_fetch_assoc($getNewID)){
+	foreach($id as $row)
+	{
+	$updateID = $row;
+}
+}
+	mysql_free_result($getUpdate);
+	print "ID is: " . $updateID . "<br>";
+
 
   $query = "INSERT INTO " . mysql_real_escape_string($position) . " 
   VALUES('" . mysql_real_escape_string($updateID) . "', 
-  '" . mysql_real_escape_string($firstName) . "',
   '" . mysql_real_escape_string($lastName) . "',
+  '" . mysql_real_escape_string($firstName) ."',
   '" . mysql_real_escape_string($sex) . "',
   '" . mysql_real_escape_string($dob) . "',
   '" . mysql_real_escape_string($dod) . "');";
