@@ -102,17 +102,6 @@ html, body {
       </form>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="./movieDBQuery.php">Enter Query</a></li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="#">Action</a></li>
-            <li><a href="#">Another action</a></li>
-            <li><a href="#">Something else here</a></li>
-            <li role="separator" class="divider"></li>
-            <li><a href="#">Separated link</a></li>
-          </ul>
-        </li>
-      </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
@@ -138,7 +127,7 @@ if(!$db_connection){
    print "Connection failed: $errmsg <br />";
    exit(1);
 }
-mysql_select_db("TEST", $db_connection);
+mysql_select_db("CS143", $db_connection);
 
 /////////////////////////////////////////
 
@@ -232,8 +221,8 @@ $act_result = mysql_query($find_act, $db_connection);
 if (empty($act_result)) {
   print "No actors or actresses found. <br>";
 }
-
-print "<h4>Actors and actresses in this movie: </h4>";
+else
+	print "<h4>Actors and actresses in this movie: </h4>";
 
 while($actor_list = mysql_fetch_assoc($act_result)){
   foreach($actor_list as $type => $row){
@@ -252,7 +241,7 @@ while($actor_list = mysql_fetch_assoc($act_result)){
 //get average rating
 $getavg = "SELECT AVG(rating) FROM Review WHERE mid=".$movie.";";
 $avg_result = mysql_query($getavg, $db_connection);
-if(!$avg_result)
+if($avg_result == 0)
 {
 	print "No ratings found; unable to fetch average rating.";
 	exit(1);
@@ -264,18 +253,25 @@ while($f_avg = mysql_fetch_assoc($avg_result))
 		$avg = $row;
 	}
 }
+if($avg == 0)
+{
+	print "No ratings found.";
+	exit(1);
+}
 print "<h4> Average Rating by Users: ".$avg."<br>";
 
 //display all reviews
 print "<h4> Reviews by Users: </h4><br>";
 $getReviews = "SELECT name, time, rating, comment FROM Review WHERE mid=".$movie.";";
 $r_result = mysql_query($getReviews, $db_connection);
-if(!$r_result)
+if(empty($r_result))
 {
-	print "Unable to fetch comments.";
+	print "No reviews to display.";
 	exit(1);
 }
-
+else{
+	print "Reviews found.";
+}
 print '<table border="1"><tr>';
 $comments = mysql_fetch_assoc($r_result);
 foreach(array_keys($comments) as $col){
