@@ -79,7 +79,7 @@ html, body {
           <li><a href="./addMovActRel.php">Add Movie/Actor Relation</a></li>
           <li><a href="./addMovDirRel.php">Add Movie/Director Relation</a></li>
           <li role="separator" class="divider"></li>
-          <li><a href="#">Separated link</a></li>
+          <li><a href="./comment.php">Add Movie Review</a></li>
         </ul>
       </li>
       <!--end ADD NEW dropdown-->
@@ -102,17 +102,6 @@ html, body {
       </form>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="./movieDBQuery.php">Enter Query</a></li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="#">Action</a></li>
-            <li><a href="#">Another action</a></li>
-            <li><a href="#">Something else here</a></li>
-            <li role="separator" class="divider"></li>
-            <li><a href="#">Separated link</a></li>
-          </ul>
-        </li>
-      </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
@@ -129,7 +118,7 @@ html, body {
 
   <h1>Search Results</h1>
   <p>(Ver 1.0 10/26/2015 by Sharon Grewal and Kelly Ou)<br>
-  Results get listed here.</p>
+  Results get listed here. Please enter a search query.</p>
 
 <?php
 
@@ -140,7 +129,7 @@ if (isset($_GET["search"])) {
     print "Connection failed: $errmsg <br />";
     exit(1);
   }
-  mysql_select_db("TEST", $db_connection);
+  mysql_select_db("CS143", $db_connection);
   $searchQuery= $_GET["search"];
   if ($searchQuery == "") {
     print "Please enter a search query.";
@@ -150,7 +139,7 @@ if (isset($_GET["search"])) {
     exit(1);
   }
 
-
+  print "searchQuery: " . $searchQuery . "<br>";
   $search_list = explode(' ', $searchQuery);
 
   $actorQuery = 'SELECT id, first, last, dob FROM Actor WHERE 1 ';
@@ -184,7 +173,7 @@ if (isset($_GET["search"])) {
       else if ($type == 'last') {
         print $row . "</a>";
       }
-      else if ($type == 'dob') {
+      else if ($type == 'dob' && 'dob' != NULL) {
         print "</a> (" . $row . ")";
       }
     }
@@ -209,16 +198,16 @@ if (isset($_GET["search"])) {
   $m_result = mysql_query($mQuery, $db_connection);
   if (sizeof($m_result) == 0)
     print "No movies found.";
-  mysql_data_seek($m_result, 1);
+ // mysql_data_seek($m_result, 1);
   while($p_mov = mysql_fetch_assoc($m_result)){
     foreach($p_mov as $type => $row){
       if ($type == 'id') {
-        print "<a href='./actorInfo.php?movie=" . $row . "&submit=Submit'>";
+        print "<a href='./movieInfo.php?movie=" . $row . "&submit=Submit'>";
       }
       else if ($type == 'title') {
         print $row . "</a>";
       }
-      else if ($type == 'year') {
+      else if ($type == 'year' && 'year' != NULL) {
         print "</a> (" . $row . ")";
       }
     }
