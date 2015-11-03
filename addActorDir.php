@@ -79,7 +79,7 @@ html, body {
           <li><a href="./addMovActRel.php">Add Movie/Actor Relation</a></li>
           <li><a href="./addMovDirRel.php">Add Movie/Director Relation</a></li>
           <li role="separator" class="divider"></li>
-          <li><a href="#">Separated link</a></li>
+          <li><a href="./comment.php">Add Movie Review</a></li>
         </ul>
       </li>
       <!--end ADD NEW dropdown-->
@@ -102,17 +102,6 @@ html, body {
       </form>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="./movieDBQuery.php">Enter Query</a></li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="#">Action</a></li>
-            <li><a href="#">Another action</a></li>
-            <li><a href="#">Something else here</a></li>
-            <li role="separator" class="divider"></li>
-            <li><a href="#">Separated link</a></li>
-          </ul>
-        </li>
-      </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
@@ -163,7 +152,7 @@ if(!$db_connection){
    print "Connection failed: $errmsg <br />";
    exit(1);
 }
-mysql_select_db("TEST", $db_connection);
+mysql_select_db("CS143", $db_connection);
 
 // php only runs if submit button is pressed
 if (isset($_GET["submit"])) {
@@ -184,10 +173,7 @@ if (isset($_GET["submit"])) {
     $dod = $_GET["dod"]; 
   }
 
-  print "position: " . $position . "<br>firstName: " . $firstName;
-  print "<br>lastName: " . $lastName . "<br>sex: " . $sex;
-  print "<br>dob: " . $dob . "<br>dod: " . $dod;
-  print "<br>";
+ 
   //check that firstName + lastName contain only letters + ' + -
   //check dob and dod are correct format yyyy-mm-dd
 
@@ -252,16 +238,26 @@ while($id = mysql_fetch_assoc($getNewID)){
 }
 }
 	mysql_free_result($getUpdate);
-	print "ID is: " . $updateID . "<br>";
+	print "ID: " . $updateID . "<br>";
 
-
-  $query = "INSERT INTO " . mysql_real_escape_string($position) . " 
+if(strcmp($position, "Actor") == 0){
+  $query = "INSERT INTO " . mysql_real_escape_string($position)." 
   VALUES('" . mysql_real_escape_string($updateID) . "', 
   '" . mysql_real_escape_string($lastName) . "',
   '" . mysql_real_escape_string($firstName) ."',
   '" . mysql_real_escape_string($sex) . "',
   '" . mysql_real_escape_string($dob) . "',
   '" . mysql_real_escape_string($dod) . "');";
+
+}
+else{
+$query = "INSERT INTO Director VALUES('".$updateID."',
+'".mysql_real_escape_string($lastName)."',
+'".mysql_real_escape_string($firstName)."',
+'".mysql_real_escape_string($dob)."',
+'".mysql_real_escape_string($dod)."');";
+
+}
 
   $result = mysql_query($query, $db_connection);
 

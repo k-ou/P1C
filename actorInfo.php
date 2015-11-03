@@ -79,7 +79,7 @@ html, body {
           <li><a href="./addMovActRel.php">Add Movie/Actor Relation</a></li>
           <li><a href="./addMovDirRel.php">Add Movie/Director Relation</a></li>
           <li role="separator" class="divider"></li>
-          <li><a href="#">Separated link</a></li>
+          <li><a href="./comment.php">Add Movie Review</a></li>
         </ul>
       </li>
       <!--end ADD NEW dropdown-->
@@ -102,17 +102,6 @@ html, body {
       </form>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="./movieDBQuery.php">Enter Query</a></li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="#">Action</a></li>
-            <li><a href="#">Another action</a></li>
-            <li><a href="#">Something else here</a></li>
-            <li role="separator" class="divider"></li>
-            <li><a href="#">Separated link</a></li>
-          </ul>
-        </li>
-      </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
@@ -138,7 +127,7 @@ html, body {
     print "Connection failed: $errmsg <br />";
     exit(1);
   }
-  mysql_select_db("TEST", $db_connection);
+  mysql_select_db("CS143", $db_connection);
 
   echo "<form action='" . $_SERVER['PHP_SELF'] . "' method='get' id='actorForm'>";
 

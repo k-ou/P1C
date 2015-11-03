@@ -79,7 +79,7 @@ html, body {
           <li><a href="./addMovActRel.php">Add Movie/Actor Relation</a></li>
           <li><a href="./addMovDirRel.php">Add Movie/Director Relation</a></li>
           <li role="separator" class="divider"></li>
-          <li><a href="#">Separated link</a></li>
+          <li><a href="./comment.php">Add Movie Review</a></li>
         </ul>
       </li>
       <!--end ADD NEW dropdown-->
@@ -102,17 +102,6 @@ html, body {
       </form>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="./movieDBQuery.php">Enter Query</a></li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="#">Action</a></li>
-            <li><a href="#">Another action</a></li>
-            <li><a href="#">Something else here</a></li>
-            <li role="separator" class="divider"></li>
-            <li><a href="#">Separated link</a></li>
-          </ul>
-        </li>
-      </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
@@ -140,7 +129,7 @@ if(!$db_connection){
    print "Connection failed: $errmsg <br />";
    exit(1);
 }
-mysql_select_db("TEST", $db_connection);
+mysql_select_db("CS143", $db_connection);
 
 echo "<form action='" . $_SERVER['PHP_SELF'] . "' method='get' id='movActRelForm'>";
 
@@ -193,11 +182,18 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
 }
 
 //using aid find actor info
-$addMovAct = "INSERT INTO MovieActor VALUES ('" . $mid . "', '" . $aid . "', '" . $role . "');";
+$addMovAct = "INSERT INTO MovieActor VALUES('".$mid."', '".$aid."',
+'".mysql_real_escape_string($role)."');";
+
 $result = mysql_query($addMovAct, $db_connection);
 
 if ($_GET["submit"]) {
   if (!$result) {
+	$message = mysql_error($db_connection);
+	print $message . "<br>";
+	print "mid is: " . $mid . "<br>";
+	print "aid is: " . $aid . "<br>";
+	print "role is " . $role . "<br>";
     print "Insertion failed. <br>";
     exit(1);
   }
@@ -206,20 +202,6 @@ if ($_GET["submit"]) {
   }
 }
 
-///////
-
-
-/*if ($_SERVER["REQUEST_METHOD"] == "GET") {
-   $movie = $_GET["movie"];
-   $actorLast = $_GET["actorLast"];
-   $actorFirst = $_GET["actorFirst"];
-   $role = $_GET["role"];
-}
-
-$mid = mysql_query("SELECT id FROM Movie WHERE Movie.title='$movie'", $db_connection);
-$aid = mysql_query("SELECT id FROM Actor WHERE Actor.last='$actorLast' AND Actor.first='$actorFirst'", $db_connection);
-$query = "INSERT INTO MovieActor VALUES ('$mid', '$aid', '$role')";
-$result = mysql_query($query, $db_connection);*/
 
 mysql_free_result($movResult);
 mysql_free_result($actResult);
