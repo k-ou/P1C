@@ -174,8 +174,19 @@ if (isset($_GET["search"])) {
   if (sizeof($a_result) == 0)
     print "No actors or actresses found.";
   while($p_actors = mysql_fetch_assoc($a_result)){
-    foreach($p_actors as $row){
-      print  $row . "\t";
+    foreach($p_actors as $type => $row){
+      if ($type == 'id') {
+        print "<a href='./actorInfo.php?actor_list=" . $row . "&submit=Submit'>";
+      }
+      else if ($type == 'first') {
+        print $row . " ";
+      }
+      else if ($type == 'last') {
+        print $row . "</a>";
+      }
+      else if ($type == 'dob') {
+        print "</a> (" . $row . ")";
+      }
     }
     print '<br>';
   }
@@ -187,7 +198,7 @@ if (isset($_GET["search"])) {
     print "No directors found.";
   mysql_data_seek($d_result, 1);
   while($p_dir = mysql_fetch_assoc($d_result)){
-    foreach($p_dir as $row){
+    foreach($p_dir as $type => $row){
       print $row . "\t";
     }
     print '<br>';
@@ -200,8 +211,16 @@ if (isset($_GET["search"])) {
     print "No movies found.";
   mysql_data_seek($m_result, 1);
   while($p_mov = mysql_fetch_assoc($m_result)){
-    foreach($p_mov as $row){
-      print $row . "\t";
+    foreach($p_mov as $type => $row){
+      if ($type == 'id') {
+        print "<a href='./actorInfo.php?movie=" . $row . "&submit=Submit'>";
+      }
+      else if ($type == 'title') {
+        print $row . "</a>";
+      }
+      else if ($type == 'year') {
+        print "</a> (" . $row . ")";
+      }
     }
     print '<br>';
   }
