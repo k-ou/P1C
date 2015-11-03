@@ -93,7 +93,7 @@ height: 100%;
   <!--end dropdown-->
       </ul>
       <!--IMPLEMENT SEARCH-->
-      <form class="navbar-form navbar-left" role="search">
+      <form action="./search.php" class="navbar-form navbar-left" role="search">
         <div class="form-group">
           <input type="text" class="form-control" placeholder="Search">
         </div>
@@ -101,17 +101,6 @@ height: 100%;
       </form>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="./movieDBQuery.php">Enter Query</a></li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="#">Action</a></li>
-            <li><a href="#">Another action</a></li>
-            <li><a href="#">Something else here</a></li>
-            <li role="separator" class="divider"></li>
-            <li><a href="#">Separated link</a></li>
-          </ul>
-        </li>
-      </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
@@ -134,7 +123,7 @@ if (!$db_connection) {
   print "Connection failed: $errmsg <br />";
   exit(1);
 }
-mysql_select_db("TEST", $db_connection);
+mysql_select_db("CS143", $db_connection);
 
 
 print "<p><h1>Review</h1><br>";
@@ -182,7 +171,7 @@ $name = "";
 $rating = "";
 $comment = "";
 
-//$time = date("Y-m-d H:i:s");
+$time = date("Y-m-d H:i:s");
 
 if($_SERVER["REQUEST_METHOD"] == "GET"){
 	$mid = $_GET["movie"];
